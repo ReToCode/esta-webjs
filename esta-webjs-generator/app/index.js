@@ -294,8 +294,13 @@ module.exports = generators.Base.extend({
         }
 
         yo.log('Updating changed/new files');
-        yo.fs.copy(yo.templatePath('src/app/components/security/interceptor/interceptor.js'), yo.destinationPath('src/app/components/security/interceptor/interceptor.js'));
-        yo.fs.copy(yo.templatePath('src/app/components/security/interceptor/interceptor.spec.js'), yo.destinationPath('src/app/components/security/interceptor/interceptor.spec.js'));
+
+        yo.fs.delete(yo.destinationPath('src/app/components/security/interceptor/interceptor.service.js'));
+        yo.fs.delete(yo.destinationPath('src/app/components/security/interceptor/interceptor.spec.js'));
+        yo.fs.commit(function() {
+            yo.fs.copy(yo.templatePath('src/app/components/security/interceptor/interceptor.service.js'), yo.destinationPath('src/app/components/security/interceptor/interceptor.service.js'));
+            yo.fs.copy(yo.templatePath('src/app/components/security/interceptor/interceptor.spec.js'), yo.destinationPath('src/app/components/security/interceptor/interceptor.spec.js'));
+        });
     },
 
     /**
