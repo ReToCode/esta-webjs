@@ -271,6 +271,34 @@ module.exports = generators.Base.extend({
     },
 
     /**
+     * UPDATE: Entfernt nicht mehr benoetigte Pakete
+     */
+    removeOldPackages: function() {
+        var yo = this;
+
+        if (!yo.options.update || !yo.continueUpdate) {
+            return;
+        }
+
+        yo.spawnCommand('npm', ['uninstall', 'angular-bootstrap-npm', '--save']);
+    },
+
+    /**
+     * UPDATE: Kopiert neue/geanderte Dateien
+     */
+    copyNewAndChangedFiles: function () {
+        var yo = this;
+
+        if (!yo.options.update) {
+            return;
+        }
+
+        yo.log('Updating changed/new files');
+        yo.fs.copy(yo.templatePath('src/app/components/security/interceptor/interceptor.js'), yo.destinationPath('src/app/components/security/interceptor/interceptor.js'));
+        yo.fs.copy(yo.templatePath('src/app/components/security/interceptor/interceptor.spec.js'), yo.destinationPath('src/app/components/security/interceptor/interceptor.spec.js'));
+    },
+
+    /**
      * Manuell beenden aufgrund von Bug in Yeoman mit Windows
      */
     end: function() {
