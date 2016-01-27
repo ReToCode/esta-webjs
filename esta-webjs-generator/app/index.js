@@ -183,14 +183,16 @@ module.exports = generators.Base.extend({
         yo.fs.copy(yo.templatePath('pom.xml'), yo.destinationPath('pom.xml'), {
             process: function (content) {
 
-                var versionRegex = new RegExp('<version>' + pkg.version + '-SNAPSHOT<\/version>');
+                var versionSnapshotRegex = new RegExp('<version>' + pkg.version + '-SNAPSHOT<\/version>');
+                var versionReleaseRegex = new RegExp('<version>' + pkg.version + '-RELEASE<\/version>');
 
                 // Replace name & version
                 return content.toString()
                     .replace(/<groupId>ch\.sbb\.esta\.webjs<\/groupId>/, '<groupId>' + yo.mavenGroupId + '</groupId>')
                     .replace(/<artifactId>esta-webjs-starterkit<\/artifactId>/, '<artifactId>' + yo.mavenArtifactId + '</artifactId>')
                     .replace(/<artifactId>esta-webjs-starterkit<\/artifactId>/, '<artifactId>' + yo.mavenArtifactId + '</artifactId>')
-                    .replace(versionRegex, '<version>' + yo.projectVersion + '</version>');
+                    .replace(versionSnapshotRegex, '<version>' + yo.projectVersion + '</version>')
+                    .replace(versionReleaseRegex, '<version>' + yo.projectVersion + '</version>');
             }
         });
 
