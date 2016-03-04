@@ -9,7 +9,7 @@ RUN wget "http://$NEXUS_URL/service/local/artifact/maven/redirect?r=mirror&g=ch.
 RUN tar -xzf esta-webjs-starterkit.tar.gz
 
 # Copy everything from tar to nginx web-folder
-COPY build /usr/share/nginx/html
+RUN mv build/* /usr/share/nginx/html
 
 # Start nginx via script, which replaces static urls with environment variables
 ADD start.sh /usr/share/nginx/start.sh
