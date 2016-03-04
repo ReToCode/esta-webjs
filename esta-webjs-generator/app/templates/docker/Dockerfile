@@ -3,7 +3,7 @@ FROM registry.sbb.ch/nginx-openshift-base
 MAINTAINER Reto Lehmann <reto.lehmann@sbb.ch>
 
 # Download sources from Repository
-RUN wget 'http://$NEXUS_URL/service/local/artifact/maven/redirect?r=mirror&g=ch.sbb.esta.webjs&a=esta-webjs-starterkit&v=$VERSION&p=tar.gz' -O esta-webjs-starterkit.tar.gz
+RUN wget "http://$NEXUS_URL/service/local/artifact/maven/redirect?r=mirror&g=ch.sbb.esta.webjs&a=esta-webjs-starterkit&v=$VERSION&p=tar.gz" -O esta-webjs-starterkit.tar.gz
 
 # Extract tar
 RUN tar -xzf esta-webjs-starterkit.tar.gz
