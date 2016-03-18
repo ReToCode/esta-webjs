@@ -94,67 +94,23 @@ describe('OAuthService', () => {
             expect($windowMock.location.replace).not.toHaveBeenCalled();
         });
 
-        it('handleCallback() should POST to authApi when tempCode is present && not loggedIn', () => {
-            let service = makeService();
-
-            spyOn(OAuthService, '_getParameterByName').and.callFake(() => {
-                return 'Xd21Aa';
-            });
-
-            $httpBackend.expectPOST('authServerUrl/oauth/token').respond(200, '');
-
-            service.handleCallback();
-            $httpBackend.flush();
-        });
-
-        it('handleCallback() should handle error when POST fails', () => {
-            let service = makeService();
-
-            spyOn(OAuthService, '_getParameterByName').and.callFake(() => {
-                return 'Xd21Aa';
-            });
-            spyOn(messagesServiceMock, 'errorMessage');
-
-            $httpBackend.expectPOST('authServerUrl/oauth/token').respond(500, '');
-
-            service.handleCallback();
-            $httpBackend.flush();
-
-            expect(messagesServiceMock.errorMessage).toHaveBeenCalledWith('Login fehlgeschlagen', true);
-        });
-
         it('handleCallback() should GET userData && save authCookie when token is present', () => {
             let service = makeService();
 
-            spyOn(OAuthService, '_getParameterByName').and.callFake(() => {
-                return 'Xd21Aa';
-            });
-            spyOn($windowMock.location, 'replace');
-
-            $httpBackend.expectPOST('authServerUrl/oauth/token').respond(200, {access_token: 'abcd'});
             $httpBackend.expectGET('authServerUrl/user').respond(200, {name: 'Reto Lehmann'});
 
-            service.handleCallback();
+            service.handleCallback('&access_token=test');
             $httpBackend.flush();
 
-            expect($windowMock.location.replace).toHaveBeenCalled();
             expect($cookies.getObject('auth').authData.name).toBe('Reto Lehmann');
         });
 
         it('handleCallback() should not save authCookie when userdata-POST fails', () => {
             let service = makeService();
 
-            spyOn(OAuthService, '_getParameterByName').and.callFake(() => {
-                return 'Xd21Aa';
-            });
-            spyOn($windowMock.location, 'replace');
             spyOn(messagesServiceMock, 'errorMessage');
 
-            $httpBackend.expectPOST('authServerUrl/oauth/token').respond(200, {access_token: 'abcd'});
-            $httpBackend.expectGET('authServerUrl/user').respond(500, {name: 'Reto Lehmann'});
-
-            service.handleCallback();
-            $httpBackend.flush();
+            service.handleCallback('&error=Invalid grant');
 
             expect($cookies.getObject('auth')).toBeUndefined();
             expect(messagesServiceMock.errorMessage).toHaveBeenCalledWith('Login fehlgeschlagen', true);

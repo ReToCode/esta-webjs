@@ -72,7 +72,7 @@ class OAuthService {
             service.$log.debug('Found a accessToken');
             service._handleLoginResponse(accessToken);
         } else {
-            console.log('error logging in: ', oauthData);
+            console.log('error during login: ', oauthData);
             service._handleErrorResponse();
         }
     }
