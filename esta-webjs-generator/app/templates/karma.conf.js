@@ -94,8 +94,9 @@ module.exports = function (config) {
                 base: 'WebDriver',
                 config: seleniumWebgrid,
                 browserName: 'internet explorer',
-                version: 11
-
+                version: 11,
+                'x-ua-compatible': 'IE=EmulateIE11',
+                platform: 'WINDOWS'
             }
         },
 
