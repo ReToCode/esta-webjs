@@ -46,9 +46,9 @@ angular.module('app', [
 
     // Globale Konfigurationeinstellungen
     .constant('config', {
-        authServerUrl: 'http://localhost/',
+        authServerUrl: 'http://localhost:9999/',
         authRedirectUrl: window.location.origin + '#/logincallback',
-        authLoginUrl: 'oauth/authorize?response_type=code&client_id=acme&redirect_uri=',
+        authLoginUrl: 'oauth/authorize?response_type=token&client_id=acme&redirect_uri=',
         authClientId: 'acme',
         authClientSecret: 'acmesecret'
     })

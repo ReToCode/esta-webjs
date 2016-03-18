@@ -60,30 +60,21 @@ class OAuthService {
 
     /**
      * Diese Methode behandelt den Callback nach dem Redirect auf den Auth-Server
-     * - Prueft ob ein Temp-Token (&code=xxxxxx) in der URL ist.
-     * - Nimmt andernfalls den Code aus der URL entgegen und ruft die Daten vom Login-Server ab.
+     * - Prueft ob ein Access-Token (&access_token=xxxxxx) in der URL ist.
+     * - Nimmt das Access-Token aus der URL entgegen und ruft die Daten vom Login-Server ab.
      * - Speichert die Login-Daten in einem Cookie ab.
      */
-    handleCallback() {
+    handleCallback(oauthData) {
         let service = this;
-        let tempCode = OAuthService._getParameterByName('code');
+        let accessToken = OAuthService._getParameterByName(oauthData, 'access_token');
 
-        service.$log.debug('Found a temp-code, now trying to get an access-token');
-
-        service.$http.post(service.config.authServerUrl + 'oauth/token',
-            service.$httpParamSerializer({
-                'grant_type': 'authorization_code',
-                'client_id': service.config.authClientId,
-                'code': tempCode,
-                'redirect_uri': service.config.authRedirectUrl
-            }),
-            {
-                headers: service._getAppAuthHeader()
-            }).success(response => {
-                service._handleLoginResponse(response);
-            }).error(err => {
-                service._handleErrorResponse(err, true);
-            });
+        if (accessToken) {
+            service.$log.debug('Found a accessToken');
+            service._handleLoginResponse(accessToken);
+        } else {
+            console.log('error logging in: ', oauthData);
+            service._handleErrorResponse();
+        }
     }
 
     /**
@@ -137,24 +128,23 @@ class OAuthService {
 
     /**
      * Falls ein access_token enthalten ist, werden die Benutzerdaten geladen.
-     * @param response Die Antwort vom token Aufruf.
+     * @param accessToken Das Access-Token.
      * @private
      */
-    _handleLoginResponse(response) {
+    _handleLoginResponse(accessToken) {
         let service = this;
 
-        if (response && response.access_token) {
-
+        if (accessToken) {
             service.$log.debug('Got an access_token, now trying to get user-info from backend');
 
             service.$http.get(service.config.authServerUrl + 'user', {
-                headers: {'Authorization': 'Bearer ' + response.access_token}
+                headers: {'Authorization': 'Bearer ' + accessToken}
             })
                 .success(userResponse => {
                     if (userResponse) {
                         service._setAuthData(userResponse);
                         // Manuelle URL bauen um den Code im Querystring zu entfernen
-                        service.$window.location.replace([location.protocol, '//', location.host, location.pathname].join(''));
+                        service.$location.path('/');
                     }
                 })
                 .error(err => {
@@ -164,19 +154,13 @@ class OAuthService {
     }
 
     /**
-     * Behandelt eine feherhafte Antwort.
-     * @param error Der Fehler.
-     * @param logError Soll der Fehler geloggt werden?
+     * Behandelt eine feherhafte Login-Antwort.
      * @private
      */
-    _handleErrorResponse(error, logError) {
+    _handleErrorResponse() {
         let service = this;
 
-        if (logError) {
-            service.$log.error('Error while logging in: ', error);
-            service.messagesService.errorMessage(service.$translate.instant('LOGIN_ERROR'), true);
-        }
-
+        service.messagesService.errorMessage(service.$translate.instant('LOGIN_ERROR'), true);
         service.$location.path('/');
     }
 
@@ -220,13 +204,14 @@ class OAuthService {
     /**
      * Helfermethode um den Query-String zu parsen.
      * @param name Den zu suchenden Namen.
+     * @param queryString Den Query-String.
      * @returns {string} Den gefundenen Wert oder ''.
      * @private
      */
-    static _getParameterByName(name) {
+    static _getParameterByName(queryString, name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
-            results = regex.exec(location.search);
+            results = regex.exec(queryString);
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 }
