@@ -5,12 +5,9 @@ MAINTAINER Reto Lehmann <reto.lehmann@sbb.ch>
 
 RUN yum install -y nginx \
  && yum clean all \
- && mkdir -p /var/lib/nginx && chmod -R 777 /var/lib/nginx \
- && mkdir -p /var/log/nginx && chmod -R 777 /var/log/nginx
+ && mkdir -p /var/lib/nginx && chmod -R 777 /var/lib/nginx
 
 COPY nginx/ /etc/nginx/
-
-VOLUME ["/var/log/nginx"]
 
 EXPOSE 8080
 
