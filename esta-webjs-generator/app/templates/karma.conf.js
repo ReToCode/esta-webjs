@@ -96,7 +96,9 @@ module.exports = function (config) {
                 browserName: 'internet explorer',
                 version: 11,
                 'x-ua-compatible': 'IE=EmulateIE11',
-                platform: 'WINDOWS'
+                platform: 'WINDOWS',
+                pseudoActivityInterval: 30000
+
             }
         },
 
