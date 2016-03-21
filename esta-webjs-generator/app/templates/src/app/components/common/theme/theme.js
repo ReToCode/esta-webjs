@@ -23,6 +23,6 @@ let themeModule = angular.module('theme', [
         });
     })
 
-    .directive('theme', themeComponent);
+    .component('theme', themeComponent);
 
 export default themeModule;

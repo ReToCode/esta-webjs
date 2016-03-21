@@ -10,10 +10,10 @@
 import template from './theme.html';
 import controller from './theme.controller';
 
-let themeComponent = function () {
-    return {
-        restrict: 'E', scope: {}, template, controller, controllerAs: 'vm', bindToController: true
-    };
+let themeComponent = {
+    template,
+    controller,
+    controllerAs: 'vm'
 };
 
 export default themeComponent;

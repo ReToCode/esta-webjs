@@ -15,6 +15,6 @@ import component from './messages.component';
 let messagesModule = angular.module('messages', [])
     .service('messagesService', service)
 
-    .directive('messages', component);
+    .component('messages', component);
 
 export default messagesModule;

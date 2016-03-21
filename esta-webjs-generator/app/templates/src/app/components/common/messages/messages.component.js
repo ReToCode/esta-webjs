@@ -10,10 +10,10 @@
 import template from './messages.html';
 import controller from './messages.controller';
 
-let messagesComponent = function () {
-    return {
-        restrict: 'E', scope: {}, template, controller, controllerAs: 'vm', bindToController: true
-    };
+let messagesComponent = {
+    template,
+    controller,
+    controllerAs: 'vm'
 };
 
 export default messagesComponent;
