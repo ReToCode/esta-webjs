@@ -10,7 +10,8 @@
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 
-import aboutComponent from './about.component';
+import template from './about.html';
+import controller from './about.controller';
 import './about.css';
 
 let aboutModule = angular.module('about', [
@@ -22,6 +23,10 @@ let aboutModule = angular.module('about', [
         });
     })
 
-    .component('about', aboutComponent);
+    .component('about', {
+        template,
+        controller,
+        controllerAs: 'vm'
+    });
 
 export default aboutModule;

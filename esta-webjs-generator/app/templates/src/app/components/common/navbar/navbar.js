@@ -10,11 +10,16 @@
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 
-import navbarComponent from './navbar.component';
+import template from './navbar.html';
+import controller from './navbar.controller';
 
 let navbarModule = angular.module('navbar', [
     uiRouter
 ])
-    .component('navbar', navbarComponent);
+    .component('navbar', {
+        template,
+        controller,
+        controllerAs: 'vm'
+    });
 
 export default navbarModule;
