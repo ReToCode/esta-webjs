@@ -18,8 +18,7 @@ let navbarModule = angular.module('navbar', [
 ])
     .component('navbar', {
         template,
-        controller,
-        controllerAs: 'vm'
+        controller
     });
 
 export default navbarModule;

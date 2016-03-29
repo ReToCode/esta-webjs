@@ -25,8 +25,7 @@ let aboutModule = angular.module('about', [
 
     .component('about', {
         template,
-        controller,
-        controllerAs: 'vm'
+        controller
     });
 
 export default aboutModule;

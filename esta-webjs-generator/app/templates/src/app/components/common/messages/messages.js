@@ -19,8 +19,7 @@ let messagesModule = angular.module('messages', [])
 
     .component('messages', {
         template,
-        controller,
-        controllerAs: 'vm'
+        controller
     });
 
 export default messagesModule;

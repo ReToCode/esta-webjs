@@ -26,8 +26,7 @@ let themeModule = angular.module('theme', [
 
     .component('theme', {
         template,
-        controller,
-        controllerAs: 'vm'
+        controller
     });
 
 export default themeModule;

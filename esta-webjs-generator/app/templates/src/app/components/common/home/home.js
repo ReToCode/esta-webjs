@@ -26,8 +26,7 @@ let homeModule = angular.module('home', [
 
     .component('home', {
         template,
-        controller,
-        controllerAs: 'vm'
+        controller
     });
 
 export default homeModule;
