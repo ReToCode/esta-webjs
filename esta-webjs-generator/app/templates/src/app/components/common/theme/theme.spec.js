@@ -9,7 +9,6 @@
  */
 import ThemeModule from './theme';
 import ThemeController from './theme.controller';
-import ThemeComponent from './theme.component';
 import ThemeTemplate from './theme.html';
 
 describe('Theme', () => {
@@ -33,19 +32,4 @@ describe('Theme', () => {
     describe('Template', () => {
     });
 
-    describe('Component', () => {
-        let component = new ThemeComponent();
-
-        it('includes the intended template', () => {
-            expect(component.template).toBe(ThemeTemplate);
-        });
-
-        it('uses `controllerAs` syntax', () => {
-            expect(component.controllerAs).not.toBeNull();
-        });
-
-        it('invokes the right controller', () => {
-            expect(component.controller).toBe(ThemeController);
-        });
-    });
 });
