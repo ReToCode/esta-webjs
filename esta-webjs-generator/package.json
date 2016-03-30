@@ -6,7 +6,8 @@
 
   "files": [
     "app",
-    "component"
+    "component",
+    "service"
   ],
   "keywords": [
     "esta-webjs",
