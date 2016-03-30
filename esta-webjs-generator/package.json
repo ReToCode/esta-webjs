@@ -5,7 +5,9 @@
   "homepage": "https://github.com/SchweizerischeBundesbahnen/esta-webjs",
 
   "files": [
-    "app"
+    "app",
+    "component",
+    "service"
   ],
   "keywords": [
     "esta-webjs",
