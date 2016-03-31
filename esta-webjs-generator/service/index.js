@@ -35,19 +35,19 @@ module.exports = generators.Base.extend({
         var nameLowerCase = lowerCase(self.name);
 
         var files = [
-            'replaceme.service.js',
-            'replaceme.js',
-            'replaceme.spec.js'
+            'replace___me.service.js',
+            'replace___me.js',
+            'replace___me.spec.js'
         ];
 
         files.forEach(function(file){
-            var newFilename = file.replace(/replaceme/, nameLowerCase);
+            var newFilename = file.replace(/replace___me/, nameLowerCase);
 
             self.fs.copy(self.templatePath(file), self.destinationPath(newFilename), {
                 process: function (content) {
                     return content.toString()
-                        .replace(/Replaceme/g, nameUpperCase)
-                        .replace(/replaceme/g, nameLowerCase);
+                        .replace(/Replace___me/g, nameUpperCase)
+                        .replace(/replace___me/g, nameLowerCase);
                 }
             });
         });
