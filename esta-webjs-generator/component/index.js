@@ -5,26 +5,18 @@
 'use strict';
 
 var generators = require('yeoman-generator');
-var mkdirp = require('mkdirp');
+var util = require('../util');
 
-function upperCase(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function lowerCase(string) {
-    return string.charAt(0).toLowerCase() + string.slice(1);
-}
-
-var self;
+var yo;
 
 module.exports = generators.Base.extend({
     constructor: function () {
 
-        self = this;
+        yo = this;
 
-        generators.Base.apply(self, arguments);
+        generators.Base.apply(yo, arguments);
 
-        self.argument('name', {
+        yo.argument('name', {
             type: String,
             required: true,
             description: 'Name of component'
@@ -32,12 +24,6 @@ module.exports = generators.Base.extend({
     },
 
     writing: function () {
-        var nameUpperCase = upperCase(self.name);
-        var nameLowerCase = lowerCase(self.name);
-        console.log('Creating component ' + nameLowerCase);
-
-        var done = self.async();
-
         var files = [
             'replace___me.controller.js',
             'replace___me.html',
@@ -45,28 +31,7 @@ module.exports = generators.Base.extend({
             'replace___me.spec.js'
         ];
 
-        var result = mkdirp.sync(self.destinationPath(nameLowerCase));
-        if (!result) {
-            console.log('Exit');
-            console.log('Directory already exists: ' + nameLowerCase);
-            done();
-            return;
-        }
-
-        console.log('   create ' + nameLowerCase);
-
-        files.forEach(function(file){
-            var newFilename = file.replace(/replace___me/, nameLowerCase);
-
-            self.fs.copy(self.templatePath(file), self.destinationPath('./' + nameLowerCase + '/'+newFilename), {
-                process: function (content) {
-                    return content.toString()
-                        .replace(/Replace___me/g, nameUpperCase)
-                        .replace(/replace___me/g, nameLowerCase);
-                }
-            });
-        });
-        done();
+        util.create(yo, 'component', files);
     }
 
 });
