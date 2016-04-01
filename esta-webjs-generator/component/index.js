@@ -5,6 +5,7 @@
 'use strict';
 
 var generators = require('yeoman-generator');
+var mkdirp = require('mkdirp');
 
 function upperCase(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -33,6 +34,9 @@ module.exports = generators.Base.extend({
     writing: function () {
         var nameUpperCase = upperCase(self.name);
         var nameLowerCase = lowerCase(self.name);
+        console.log('Creating component ' + nameLowerCase);
+
+        var done = self.async();
 
         var files = [
             'replace___me.controller.js',
@@ -41,10 +45,20 @@ module.exports = generators.Base.extend({
             'replace___me.spec.js'
         ];
 
+        var result = mkdirp.sync(self.destinationPath(nameLowerCase));
+        if (!result) {
+            console.log('Exit');
+            console.log('Directory already exists: ' + nameLowerCase);
+            done();
+            return;
+        }
+
+        console.log('   create ' + nameLowerCase);
+
         files.forEach(function(file){
             var newFilename = file.replace(/replace___me/, nameLowerCase);
 
-            self.fs.copy(self.templatePath(file), self.destinationPath(newFilename), {
+            self.fs.copy(self.templatePath(file), self.destinationPath('./' + nameLowerCase + '/'+newFilename), {
                 process: function (content) {
                     return content.toString()
                         .replace(/Replace___me/g, nameUpperCase)
@@ -52,6 +66,7 @@ module.exports = generators.Base.extend({
                 }
             });
         });
+        done();
     }
 
 });
