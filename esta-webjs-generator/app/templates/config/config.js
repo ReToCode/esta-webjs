@@ -1,6 +1,4 @@
 /*
- * Copyright (C) Schweizerische Bundesbahnen SBB, 2016.
- * 
  * @author u215942 (Stefan Zeller)
  * @version: 1.0.1
  * @since 04.04.2016
