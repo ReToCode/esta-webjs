@@ -8,7 +8,7 @@
  * @since 23.10.2015, 2015.
  */
 var ip = require('ip');
-var webjsConfig = require('./config/config');
+var webjsConfig = require('./config/shared.build.config');
 
 module.exports = function (config) {
 
