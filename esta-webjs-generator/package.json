@@ -3,7 +3,6 @@
   "version": "1.0.1",
   "description": "ESTA WebJS yeoman generator package",
   "homepage": "https://github.com/SchweizerischeBundesbahnen/esta-webjs",
-
   "files": [
     "app",
     "component",
@@ -19,6 +18,7 @@
     "generator"
   ],
   "dependencies": {
+    "mkdirp": "^0.5.1",
     "yeoman-generator": "^0.21.1",
     "yosay": "^1.0.5"
   },

@@ -25,10 +25,10 @@ ESTA WebJS is a development stack for web applications with AngularJS, written i
 
 `yo esta-webjs component <name>`
 
-Creates all files for a component.
+Creates the directory and all files for a component.
 
 ### Create a service
 
 `yo esta-webjs service <name>`
 
-Creates all files for a service.
+Creates the directory and all files for a service.
