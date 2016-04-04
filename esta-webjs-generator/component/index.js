@@ -5,25 +5,18 @@
 'use strict';
 
 var generators = require('yeoman-generator');
+var util = require('../util');
 
-function upperCase(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function lowerCase(string) {
-    return string.charAt(0).toLowerCase() + string.slice(1);
-}
-
-var self;
+var yo;
 
 module.exports = generators.Base.extend({
     constructor: function () {
 
-        self = this;
+        yo = this;
 
-        generators.Base.apply(self, arguments);
+        generators.Base.apply(yo, arguments);
 
-        self.argument('name', {
+        yo.argument('name', {
             type: String,
             required: true,
             description: 'Name of component'
@@ -31,27 +24,14 @@ module.exports = generators.Base.extend({
     },
 
     writing: function () {
-        var nameUpperCase = upperCase(self.name);
-        var nameLowerCase = lowerCase(self.name);
-
         var files = [
-            'replaceme.controller.js',
-            'replaceme.html',
-            'replaceme.js',
-            'replaceme.spec.js'
+            'replace___me.controller.js',
+            'replace___me.html',
+            'replace___me.js',
+            'replace___me.spec.js'
         ];
 
-        files.forEach(function(file){
-            var newFilename = file.replace(/replaceme/, nameLowerCase);
-
-            self.fs.copy(self.templatePath(file), self.destinationPath(newFilename), {
-                process: function (content) {
-                    return content.toString()
-                        .replace(/Replaceme/g, nameUpperCase)
-                        .replace(/replaceme/g, nameLowerCase);
-                }
-            });
-        });
+        util.create(yo, 'component', files);
     }
 
 });

@@ -1,15 +1,15 @@
-import ReplacemeModule from './replaceme';
-import ReplacemeController from './replaceme.controller.js';
-import ReplacemeTemplate from './replaceme.html';
+import Replace___meModule from './replace___me';
+import Replace___meController from './replace___me.controller.js';
+import Replace___meTemplate from './replace___me.html';
 
-describe('Replaceme', () => {
+describe('Replace___me', () => {
     let $rootScope, makeController;
 
-    beforeEach(window.module(ReplacemeModule.name));
+    beforeEach(window.module(Replace___meModule.name));
     beforeEach(inject((_$rootScope_) => {
         $rootScope = _$rootScope_;
         makeController = () => {
-            return new ReplacemeController();
+            return new Replace___meController();
         };
     }));
 
@@ -18,16 +18,16 @@ describe('Replaceme', () => {
     });
 
     describe('Controller', () => {
-        it('has a name property [name]', () => {
+        it('has a name property [content]', () => {
             let controller = makeController();
-            expect(controller.name).toBe('replaceme');
+            expect(controller.content).toBe('Hello, Replace___me');
         });
     });
 
     describe('Template', () => {
         // use regex to ensure correct bindings are used e.g., {{  }}
         it('has template', () => {
-            expect(ReplacemeTemplate).length > 0;
+            expect(Replace___meTemplate).length > 0;
         });
     });
 

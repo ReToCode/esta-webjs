@@ -1,15 +1,16 @@
-import ReplacemeModule from './replaceme';
-import ReplacemeService from './replaceme.service.js';
+import Replace___meModule from './replace___me';
 
-describe('ReplacemeService', () => {
+import Replace___meService from './replace___me.service.js';
+
+describe('Replace___meService', () => {
     let $rootScope, makeService;
 
-    beforeEach(window.module(ReplacemeModule.name));
+    beforeEach(window.module(Replace___meModule.name));
     beforeEach(inject((_$rootScope_) => {
 
         $rootScope = _$rootScope_;
         makeService = () => {
-            return new ReplacemeService();
+            return new Replace___meService();
         };
     }));
 
