@@ -10,11 +10,16 @@
 import angular from 'angular';
 
 import service from './messages.service';
-import component from './messages.component';
+
+import template from './messages.html';
+import controller from './messages.controller';
 
 let messagesModule = angular.module('messages', [])
     .service('messagesService', service)
 
-    .directive('messages', component);
+    .component('messages', {
+        template,
+        controller
+    });
 
 export default messagesModule;

@@ -9,7 +9,6 @@
  */
 import HomeModule from './home';
 import HomeController from './home.controller';
-import HomeComponent from './home.component';
 import HomeTemplate from './home.html';
 
 describe('Home', () => {
@@ -41,26 +40,11 @@ describe('Home', () => {
     describe('Template', () => {
         // Use regex to ensure correct bindings are used e.g., {{  }}
         it('has name in template [title]', () => {
-            expect(HomeTemplate).toMatch(/{{\s?vm\.title\s?}}/g);
+            expect(HomeTemplate).toMatch(/{{\s?\$ctrl\.title\s?}}/g);
         });
         it('has name in template [welcomeMessage]', () => {
-            expect(HomeTemplate).toMatch(/{{\s?vm\.welcomeMessage\s?}}/g);
+            expect(HomeTemplate).toMatch(/{{\s?\$ctrl\.welcomeMessage\s?}}/g);
         });
     });
 
-    describe('Component', () => {
-        let component = new HomeComponent();
-
-        it('includes the intended template', () => {
-            expect(component.template).toBe(HomeTemplate);
-        });
-
-        it('uses `controllerAs` syntax', () => {
-            expect(component.controllerAs).not.toBeNull();
-        });
-
-        it('invokes the right controller', () => {
-            expect(component.controller).toBe(HomeController);
-        });
-    });
 });

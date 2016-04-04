@@ -18,3 +18,17 @@ ESTA WebJS is a development stack for web applications with AngularJS, written i
 * Install the tools: npm install -g yo webpack webpack-dev-server gulp
 * Install the generator: npm install -g generator-esta-webjs
 * Start the generator and follow the instructions: yo esta-webjs
+
+## Tasks
+
+### Create a component
+
+`yo esta-webjs component <name>`
+
+Creates all files for a component.
+
+### Create a service
+
+`yo esta-webjs service <name>`
+
+Creates all files for a service.
