@@ -13,6 +13,7 @@ var path = require('path');
 var browserSyncPlugin = require('browser-sync-webpack-plugin');
 var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 var buildPath = path.join(__dirname, 'target/build');
+var HtmlWebpackPlugin = require("html-webpack-plugin");
 
 /**
  * Gemeinsame Konfigurationsdatei fuer Webpack (der Teil, der fuer alle Umgebungen gleich ist)
@@ -32,10 +33,6 @@ var commonConfig = exports.commonConfig = {
             'bootstrap/dist/css/bootstrap.css',
             'jquery'
         ]
-    },
-    // Ausgabedatei
-    output: {
-        filename: 'bundle.js'
     },
     // Modulkonfiguration fuer alle Dateitypen, welcher Loader soll verwendet werden
     module: {
@@ -72,7 +69,9 @@ var commonConfig = exports.commonConfig = {
  */
 exports.production = extend({}, commonConfig, {
     output: {
-        path: buildPath
+        path: buildPath,
+        filename: '[name].[chunkhash].js',
+        chunkFilename: '[chunkhash].js'
     }, plugins: [
         new ngAnnotatePlugin({add: true}),
         new webpack.optimize.DedupePlugin(),
@@ -81,7 +80,12 @@ exports.production = extend({}, commonConfig, {
                 warnings: true
             }
         }),
-        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js')
+        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.[chunkhash].bundle.js'),
+        new webpack.optimize.CommonsChunkPlugin('app', 'app.[chunkhash].bundle.js'),
+        // automatisches Einfügen der Dateien app und vendor
+        new HtmlWebpackPlugin({
+            template: '../index.html'
+        })
     ], devtool: 'cheap-source-map'
 });
 
@@ -95,6 +99,10 @@ exports.development = extend({}, commonConfig, {
     }, plugins: [
         new browserSyncPlugin({
             proxy: 'localhost:3000'
-        }), new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js')
+        }),
+        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
+        new HtmlWebpackPlugin({
+            template: '../index.html'
+        })
     ], watch: true, devtool: 'source-map'
 });
