@@ -8,6 +8,7 @@
  * @since 23.10.2015, 2015.
  */
 var ip = require('ip');
+var webjsConfig = require('./config/config');
 
 module.exports = function (config) {
 
@@ -46,17 +47,7 @@ module.exports = function (config) {
 
         webpack: {
             debug: true, devtool: 'inline-source-map', module: {
-                loaders: [
-                    {
-                        test: /\.js$/, exclude: [/node_modules/], loader: 'babel'
-                    }, {
-                        test: /\.js$/, include: [/src/], exclude: [/\.spec\.js/], loader: 'isparta'
-                    }, {
-                        test: /\.html/, loader: 'raw'
-                    }, {
-                        test: /\.css$/, loader: 'style!css'
-                    }
-                ]
+                loaders: webjsConfig.webpackLoaders
             }
         },
 

@@ -13,6 +13,7 @@ var path = require('path');
 var browserSyncPlugin = require('browser-sync-webpack-plugin');
 var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 var buildPath = path.join(__dirname, 'target/build');
+var webjsConfig = require('./config/config');
 
 /**
  * Gemeinsame Konfigurationsdatei fuer Webpack (der Teil, der fuer alle Umgebungen gleich ist)
@@ -39,26 +40,7 @@ var commonConfig = exports.commonConfig = {
     },
     // Modulkonfiguration fuer alle Dateitypen, welcher Loader soll verwendet werden
     module: {
-        loaders: [
-            {
-                test: /\.js$/, exclude: [/node_modules/], loader: 'babel'
-            }, {
-                test: /\.json$/, loader: 'json'
-            }, {
-                test: /\.html$/, loader: 'raw'
-            }, {
-                test: /\.css$/, loader: 'style!css'
-            }, {
-                test: /\.(jpe?g|png|gif|svg)$/i,
-                loader: 'file-loader'
-            }, {
-                test: /\.(woff|woff2)$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff'
-            }, {
-                test: /\.ttf$/, loader: 'file-loader'
-            }, {
-                test: /\.eot$/, loader: 'file-loader'
-            }
-        ]
+        loaders: webjsConfig.webpackLoaders
     },
     resolve: {
         fallback: path.join(__dirname, 'node_modules')
