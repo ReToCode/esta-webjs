@@ -52,8 +52,7 @@ var commonConfig = exports.commonConfig = {
 exports.production = extend({}, commonConfig, {
     output: {
         path: buildPath,
-        filename: '[name].[chunkhash].js',
-        chunkFilename: '[chunkhash].js'
+        filename: '[name].[chunkhash].js'
     }, plugins: [
         new ngAnnotatePlugin({add: true}),
         new webpack.optimize.DedupePlugin(),
@@ -62,8 +61,6 @@ exports.production = extend({}, commonConfig, {
                 warnings: true
             }
         }),
-        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.[chunkhash].bundle.js'),
-        new webpack.optimize.CommonsChunkPlugin('app', 'app.[chunkhash].bundle.js'),
         // automatisches Einfügen der Dateien app und vendor
         new HtmlWebpackPlugin({
             template: '../index.html'
@@ -77,12 +74,12 @@ exports.production = extend({}, commonConfig, {
  */
 exports.development = extend({}, commonConfig, {
     output: {
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'dist'),
+        filename: '[name].[chunkhash].js'
     }, plugins: [
         new browserSyncPlugin({
             proxy: 'localhost:3000'
         }),
-        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
         new HtmlWebpackPlugin({
             template: '../index.html'
         })
