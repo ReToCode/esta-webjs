@@ -16,7 +16,7 @@ RUN yum install -y nginx \
 RUN chmod -R 777 /usr/share/nginx
 RUN touch /var/log/nginx/access.log
 RUN touch /var/log/nginx/error.log
-RUN chmod -R 777 /var/log/nginx
+RUN chmod 777 /var/log/nginx/access.log /var/log/nginx/error.log
 RUN chmod -R 777 /var/lib/nginx
 
 # forward request and error logs to docker log collector
