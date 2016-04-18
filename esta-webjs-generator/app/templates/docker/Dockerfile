@@ -9,9 +9,12 @@ RUN wget "http://repo.sbb.ch/service/local/artifact/maven/redirect?r=mirror&g=ch
 RUN tar -xzf esta-webjs-starterkit.tar.gz
 RUN mv build/* /usr/share/nginx/html
 
+# Fix permissions
+RUN chmod 777 /usr/share/ngnix/html
+
 # Start nginx via script, which replaces static urls with environment variables
 ADD start.sh /usr/share/nginx/start.sh
-RUN ["chmod", "+x", "/usr/share/nginx/start.sh"]
+RUN chmod +x /usr/share/nginx/start.sh
 
-CMD ["/usr/share/nginx/start.sh"]
+CMD /usr/share/nginx/start.sh
 
