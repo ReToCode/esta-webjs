@@ -12,7 +12,6 @@ RUN yum install -y nginx \
  && mkdir -p /var/lib/nginx/html
 
 # fix permissions
-# Fix permissions
 RUN chmod -R 777 /usr/share/nginx/html /var/log/nginx
 
 # forward request and error logs to docker log collector
