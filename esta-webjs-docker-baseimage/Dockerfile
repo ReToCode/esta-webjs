@@ -9,7 +9,7 @@ RUN echo "proxy=http://yourproxy:8080/" >> /etc/yum.conf \
 
 RUN yum install -y nginx \
  && yum clean all \
- && mkdir -p /var/lib/nginx/html
+ && mkdir -p /var/lib/nginx/html \
  && mkdir -p /var/log/nginx
 
 # fix permissions
