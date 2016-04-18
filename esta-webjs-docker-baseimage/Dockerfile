@@ -10,9 +10,10 @@ RUN echo "proxy=http://yourproxy:8080/" >> /etc/yum.conf \
 RUN yum install -y nginx \
  && yum clean all \
  && mkdir -p /var/lib/nginx/html
+ && mkdir -p /var/log/nginx
 
 # fix permissions
-RUN chmod -R 777 /usr/share/nginx/html /var/log/nginx
+RUN chmod -R 777 /usr/share/nginx /var/log/nginx
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
