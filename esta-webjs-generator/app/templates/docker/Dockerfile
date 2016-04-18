@@ -10,7 +10,7 @@ RUN tar -xzf esta-webjs-starterkit.tar.gz
 RUN mv build/* /usr/share/nginx/html
 
 # Fix permissions
-RUN chmod 777 /usr/share/ngnix/html
+RUN chmod 777 /usr/share/nginx/html
 
 # Start nginx via script, which replaces static urls with environment variables
 ADD start.sh /usr/share/nginx/start.sh
