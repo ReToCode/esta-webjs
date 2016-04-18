@@ -1,5 +1,5 @@
 # Dockerfile for ESTA WebJS
-FROM registry.sbb.ch/kd_esta/nginx-openshift-base
+FROM registry.sbb.ch/kd_esta/nginx-openshift-base:0.0.6
 MAINTAINER Reto Lehmann <reto.lehmann@sbb.ch>
 
 # Download sources from Repository
