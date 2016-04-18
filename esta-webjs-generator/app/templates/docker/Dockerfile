@@ -1,5 +1,5 @@
 # Dockerfile for ESTA WebJS
-FROM registry.sbb.ch/kd_esta/nginx-openshift-base:0.0.10
+FROM registry.sbb.ch/kd_esta/nginx-openshift-base:0.0.11
 MAINTAINER Reto Lehmann <reto.lehmann@sbb.ch>
 
 # Download sources from Repository
@@ -12,8 +12,6 @@ RUN mv build/* /usr/share/nginx/html
 # Start nginx via script, which replaces static urls with environment variables
 ADD start.sh /usr/share/nginx/start.sh
 RUN chmod +x /usr/share/nginx/start.sh
-
-VOLUME /var/log/nginx
 
 CMD /usr/share/nginx/start.sh
 

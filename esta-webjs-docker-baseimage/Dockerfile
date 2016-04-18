@@ -9,15 +9,14 @@ RUN echo "proxy=http://yourproxy:8080/" >> /etc/yum.conf \
 
 RUN yum install -y nginx \
  && yum clean all \
- && mkdir -p /var/lib/nginx/html \
- && mkdir -p /var/log/nginx
+ && mkdir -p /var/lib/nginx/html
 
 # fix permissions
 RUN chmod -R 777 /usr/share/nginx
-RUN touch /var/log/nginx/access.log
-RUN touch /var/log/nginx/error.log
-RUN chmod 777 /var/log/nginx/access.log /var/log/nginx/error.log
 RUN chmod -R 777 /var/lib/nginx
+
+# create a EmptyDir in Openshift for the logs
+VOLUME /var/log/nginx
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
