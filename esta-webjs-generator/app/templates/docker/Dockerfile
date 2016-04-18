@@ -13,5 +13,8 @@ RUN mv build/* /usr/share/nginx/html
 ADD start.sh /usr/share/nginx/start.sh
 RUN chmod +x /usr/share/nginx/start.sh
 
+RUN chmod 777 /var/log/nginx/error.log
+RUN chmod 777 /var/log/nginx/access.log
+
 CMD /usr/share/nginx/start.sh
 
