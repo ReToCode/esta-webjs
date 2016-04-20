@@ -7,25 +7,21 @@
  * @version: 0.0.11
  * @since 24.11.2015, 2015.
  */
-import 'angular-cookies';
 import OAuthInterceptorModule from './interceptor';
 import OAuthInterceptorService from './interceptor.service';
 
 describe('OAuthInterceptorService', () => {
-    let $rootScope, makeService, $cookies, $location;
+    let $rootScope, makeService, $location;
 
     beforeEach(window.module(OAuthInterceptorModule.name));
-    beforeEach(inject((_$rootScope_, _$cookies_,
+    beforeEach(inject((_$rootScope_,
                        _$location_, _$q_) => {
 
         $rootScope = _$rootScope_;
         $location = _$location_;
-        $cookies = _$cookies_;
-
-        $cookies.remove('auth');
 
         makeService = () => {
-            return new OAuthInterceptorService(_$q_, $location, $cookies);
+            return new OAuthInterceptorService(_$q_, $location);
         };
     }));
 

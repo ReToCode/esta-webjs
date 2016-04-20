@@ -11,16 +11,15 @@ let service; // This ist in einem Interceptor nicht verfuegbar => Deshalb im Kon
 class OAuthInterceptorService {
 
     /*@ngInject*/
-    constructor($q, $location, $cookies) {
+    constructor($q, $location) {
         service = this;
         service.$q = $q;
         service.$location = $location;
-        service.$cookies = $cookies;
     }
 
     responseError(res) {
         if (res.status === 401) {
-            service.$cookies.remove('auth');
+            localStorage.removeItem('auth');
             service.$location.path('/login');
         } else {
             return service.$q.reject(res);
