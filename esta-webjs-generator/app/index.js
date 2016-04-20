@@ -312,10 +312,10 @@ module.exports = generators.Base.extend({
             yo.fs.copy(yo.templatePath('src/app/components/security/oauth/oauth.spec.js'), yo.destinationPath('src/app/components/security/oauth/oauth.spec.js'));
         });
 
-        yo.fs.delete(yo.destinationPath('src/app/.jshintrc'));
+        yo.fs.delete(yo.destinationPath('.jshintrc'));
 
         yo.fs.commit(function() {
-            yo.fs.copy(yo.templatePath('src/app/.jshintrc'), yo.destinationPath('src/app/.jshintrc'));
+            yo.fs.copy(yo.templatePath('.jshintrc'), yo.destinationPath('.jshintrc'));
         });
     },
 

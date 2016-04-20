@@ -1,16 +1,21 @@
-/*
- * Copyright (C) Schweizerische Bundesbahnen SBB, 2016
+/**
+ * Copyright (C) Schweizerische Bundesbahnen SBB, 2015.
+ *
+ * ESTA WebJS: Hilfsklasse fuer Generatoren
+ *
+ * @author u215942 (Stefan Zeller)
+ * @version: 1.1.0
+ * @since 20.04.2016, 2016.
  */
-
 var mkdirp = require('mkdirp');
 
 var upperCase = function(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
-}
+};
 
 var lowerCase = function(string) {
     return string.charAt(0).toLowerCase() + string.slice(1);
-}
+};
 
 var create = function(yo, type, files) {
     var nameUpperCase = upperCase(yo.name);
@@ -36,6 +41,6 @@ var create = function(yo, type, files) {
             }
         });
     });
-}
+};
 
 exports.create = create;
