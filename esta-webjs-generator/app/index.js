@@ -311,6 +311,12 @@ module.exports = generators.Base.extend({
             yo.fs.copy(yo.templatePath('src/app/components/security/oauth/oauth.service.js'), yo.destinationPath('src/app/components/security/oauth/oauth.service.js'));
             yo.fs.copy(yo.templatePath('src/app/components/security/oauth/oauth.spec.js'), yo.destinationPath('src/app/components/security/oauth/oauth.spec.js'));
         });
+
+        yo.fs.delete(yo.destinationPath('src/app/.jshintrc'));
+
+        yo.fs.commit(function() {
+            yo.fs.copy(yo.templatePath('src/app/.jshintrc'), yo.destinationPath('src/app/.jshintrc'));
+        });
     },
 
     /**
