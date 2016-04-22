@@ -12,7 +12,6 @@
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import ngResource from 'angular-resource';
-import ngCookies from 'angular-cookies';
 import ngTranslate from 'angular-translate';
 import ngTranslateStaticFilesLoader from 'angular-translate-loader-static-files';
 import uiBootstrap from 'angular-ui-bootstrap';
@@ -29,7 +28,7 @@ import langDe from './languages/lang-de.json';
 import langEn from './languages/lang-en.json';
 
 angular.module('app', [
-    uiRouter, ngTranslate, ngTranslateStaticFilesLoader, ngCookies, ngResource,
+    uiRouter, ngTranslate, ngTranslateStaticFilesLoader, ngResource,
     uiBootstrap, Components.name
 ])
     .config(/*@ngInject*/($translateProvider, $httpProvider) => {
@@ -46,9 +45,9 @@ angular.module('app', [
 
     // Globale Konfigurationeinstellungen
     .constant('config', {
-        authServerUrl: 'http://localhost/',
+        authServerUrl: 'http://localhost:9999/',
         authRedirectUrl: window.location.origin + '#/logincallback',
-        authLoginUrl: 'oauth/authorize?response_type=code&client_id=acme&redirect_uri=',
+        authLoginUrl: 'oauth/authorize?response_type=token&client_id=acme&redirect_uri=',
         authClientId: 'acme',
         authClientSecret: 'acmesecret'
     })

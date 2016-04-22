@@ -9,7 +9,6 @@
  */
 import NavbarModule from './navbar';
 import NavbarController from './navbar.controller';
-import NavbarComponent from './navbar.component';
 import NavbarTemplate from './navbar.html';
 
 describe('Navbar', () => {
@@ -44,19 +43,4 @@ describe('Navbar', () => {
         });
     });
 
-    describe('Component', () => {
-        let component = new NavbarComponent();
-
-        it('includes the intended template', () => {
-            expect(component.template).toBe(NavbarTemplate);
-        });
-
-        it('uses `controllerAs` syntax', () => {
-            expect(component.controllerAs).not.toBeNull();
-        });
-
-        it('invokes the right controller', () => {
-            expect(component.controller).toBe(NavbarController);
-        });
-    });
 });

@@ -3,7 +3,7 @@
     <div class="container">
         <div class="jumbotron">
             <div>
-                <h1>{{ vm.aboutMessage }}
+                <h1>{{ $ctrl.aboutMessage }}
                     <small>Eine Demoseite</small>
                 </h1>
             </div>
@@ -12,8 +12,8 @@
                     <h2>{{ 'ABOUT_SUBTITLE' | translate }}</h2>
 
                     <p>{{ 'ABOUT_TEXT' | translate }}</p>
-                    <button class="btn btn-primary" ng-click="vm.changeLanguage('de')">Deutsch</button>
-                    <button class="btn btn-default" ng-click="vm.changeLanguage('en')">English</button>
+                    <button class="btn btn-primary" ng-click="$ctrl.changeLanguage('de')">Deutsch</button>
+                    <button class="btn btn-default" ng-click="$ctrl.changeLanguage('en')">English</button>
                 </section>
             </div>
             <div class="spacer"></div>
@@ -21,13 +21,13 @@
                 <section>
                     <h2>Per $resource (REST) geladene Posts</h2>
 
-                    <p>Im Viewmodel sind {{ vm.posts.length }} Posts vorhanden</p>
+                    <p>Im Viewmodel sind {{ $ctrl.posts.length }} Posts vorhanden</p>
 
                     <p>Der erste Post hat den Titel: </p>
-                    <pre>{{ vm.posts[0].title }}</pre>
+                    <pre>{{ $ctrl.posts[0].title }}</pre>
 
-                    <p>Der Post mit der Id {{ vm.postById.id }} hat den Titel:</p>
-                    <pre>{{ vm.postById.title }}</pre>
+                    <p>Der Post mit der Id {{ $ctrl.postById.id }} hat den Titel:</p>
+                    <pre>{{ $ctrl.postById.title }}</pre>
                 </section>
             </div>
         </div>

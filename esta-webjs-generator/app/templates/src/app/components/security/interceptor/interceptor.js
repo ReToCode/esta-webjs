@@ -10,7 +10,7 @@
 import angular from 'angular';
 import oAuthInterceptorService from './interceptor.service';
 
-let oAuthInterceptorModule = angular.module('oAuthInterceptor', [/*@ngInject*/'ngCookies'])
+let oAuthInterceptorModule = angular.module('oAuthInterceptor', [])
 
     .service('oAuthInterceptorService', oAuthInterceptorService);
 

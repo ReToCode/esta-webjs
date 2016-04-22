@@ -28,9 +28,9 @@ let loginModule = angular.module('login', [
                 }]
             })
             .state('logincallback', {
-                url: '/logincallback',
-                controller: ['oAuthService', (oAuthService) => {
-                    oAuthService.handleCallback();
+                url: '/logincallback{oauth:.*}',
+                controller: ['oAuthService', '$stateParams', (oAuthService, $stateParams) => {
+                    oAuthService.handleCallback($stateParams.oauth);
                 }]
             });
     });

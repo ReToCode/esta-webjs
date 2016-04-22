@@ -7,12 +7,11 @@
  * @version: 0.0.2
  * @since 06.11.2015, 2015.
  */
-import 'angular-cookies';
 import OAuthModule from './oauth';
 import OAuthService from './oauth.service';
 
 describe('OAuthService', () => {
-    let $rootScope, makeService, $httpBackend, $cookies,
+    let $rootScope, makeService, $httpBackend,
         messagesServiceMock, configMock, translateMock,
         $location, $windowMock;
 
@@ -39,18 +38,19 @@ describe('OAuthService', () => {
     };
 
     beforeEach(window.module(OAuthModule.name));
-    beforeEach(inject((_$rootScope_, _$httpBackend_, _$http_, _$cookies_, _$log_,
-                       _$location_, _$httpParamSerializer_, _$q_) => {
+    beforeEach(inject((_$rootScope_, _$httpBackend_, _$http_, _$log_,
+                       _$location_, _$httpParamSerializer_, _$q_, _$window_) => {
 
         $rootScope = _$rootScope_;
         $httpBackend = _$httpBackend_;
         $location = _$location_;
-        $cookies = _$cookies_;
 
-        $cookies.remove('auth');
+        $windowMock.localStorage = _$window_.localStorage;
+
+        $windowMock.localStorage.clear();
 
         makeService = () => {
-            return new OAuthService(_$http_, configMock, $cookies, _$log_, $location,
+            return new OAuthService(_$http_, configMock, _$log_, $location,
                 $windowMock, _$httpParamSerializer_, messagesServiceMock, translateMock, _$q_);
         };
     }));
@@ -77,15 +77,13 @@ describe('OAuthService', () => {
             expect($windowMock.location.replace).toHaveBeenCalledWith('authServerUrl/authLoginUrl%23%2Flogincallback');
         });
 
-        it('login() should redirect to homepage when isloggedIn', () => {
+        it('login() should redirect to homepage when isLoggedIn', () => {
 
             let service = makeService();
 
-            $cookies.putObject('auth', {
-                authData: {
-                    authenticated: true
-                }
-            });
+            $windowMock.localStorage.setItem('auth', JSON.stringify({
+                authenticated: true
+            }));
 
             spyOn($windowMock.location, 'replace');
 
@@ -94,69 +92,25 @@ describe('OAuthService', () => {
             expect($windowMock.location.replace).not.toHaveBeenCalled();
         });
 
-        it('handleCallback() should POST to authApi when tempCode is present && not loggedIn', () => {
+        it('handleCallback() should GET userData && save authData to localStorage when token is present', () => {
             let service = makeService();
 
-            spyOn(OAuthService, '_getParameterByName').and.callFake(() => {
-                return 'Xd21Aa';
-            });
-
-            $httpBackend.expectPOST('authServerUrl/oauth/token').respond(200, '');
-
-            service.handleCallback();
-            $httpBackend.flush();
-        });
-
-        it('handleCallback() should handle error when POST fails', () => {
-            let service = makeService();
-
-            spyOn(OAuthService, '_getParameterByName').and.callFake(() => {
-                return 'Xd21Aa';
-            });
-            spyOn(messagesServiceMock, 'errorMessage');
-
-            $httpBackend.expectPOST('authServerUrl/oauth/token').respond(500, '');
-
-            service.handleCallback();
-            $httpBackend.flush();
-
-            expect(messagesServiceMock.errorMessage).toHaveBeenCalledWith('Login fehlgeschlagen', true);
-        });
-
-        it('handleCallback() should GET userData && save authCookie when token is present', () => {
-            let service = makeService();
-
-            spyOn(OAuthService, '_getParameterByName').and.callFake(() => {
-                return 'Xd21Aa';
-            });
-            spyOn($windowMock.location, 'replace');
-
-            $httpBackend.expectPOST('authServerUrl/oauth/token').respond(200, {access_token: 'abcd'});
             $httpBackend.expectGET('authServerUrl/user').respond(200, {name: 'Reto Lehmann'});
 
-            service.handleCallback();
+            service.handleCallback('&access_token=test');
             $httpBackend.flush();
 
-            expect($windowMock.location.replace).toHaveBeenCalled();
-            expect($cookies.getObject('auth').authData.name).toBe('Reto Lehmann');
+            expect(JSON.parse($windowMock.localStorage.getItem('auth')).name).toBe('Reto Lehmann');
         });
 
-        it('handleCallback() should not save authCookie when userdata-POST fails', () => {
+        it('handleCallback() should not save authData to localStorage when userdata-POST fails', () => {
             let service = makeService();
 
-            spyOn(OAuthService, '_getParameterByName').and.callFake(() => {
-                return 'Xd21Aa';
-            });
-            spyOn($windowMock.location, 'replace');
             spyOn(messagesServiceMock, 'errorMessage');
 
-            $httpBackend.expectPOST('authServerUrl/oauth/token').respond(200, {access_token: 'abcd'});
-            $httpBackend.expectGET('authServerUrl/user').respond(500, {name: 'Reto Lehmann'});
+            service.handleCallback('&error=Invalid grant');
 
-            service.handleCallback();
-            $httpBackend.flush();
-
-            expect($cookies.getObject('auth')).toBeUndefined();
+            expect(JSON.parse($windowMock.localStorage.getItem('auth'))).toBeNull();
             expect(messagesServiceMock.errorMessage).toHaveBeenCalledWith('Login fehlgeschlagen', true);
         });
 
@@ -170,14 +124,12 @@ describe('OAuthService', () => {
             expect($location.path).toHaveBeenCalledWith('/');
         });
 
-        it('logout() should POST to logout and remove auth cookie when loggedIn', () => {
+        it('logout() should POST to logout and remove authData from localStorage when loggedIn', () => {
             let service = makeService();
 
-            $cookies.putObject('auth', {
-                authData: {
-                    authenticated: true
-                }
-            });
+            $windowMock.localStorage.setItem('auth', JSON.stringify({
+                authenticated: true
+            }));
 
             $httpBackend.expectPOST('authServerUrl/logout').respond(200, '');
 
@@ -185,17 +137,15 @@ describe('OAuthService', () => {
 
             $httpBackend.flush();
 
-            expect($cookies.getObject('auth')).toBeUndefined();
+            expect(localStorage.getItem('auth')).toBeNull();
         });
 
-        it('logout() should remove auth cookie when loggedIn and POST fails', () => {
+        it('logout() should remove authData from localStorage when loggedIn and POST fails', () => {
             let service = makeService();
 
-            $cookies.putObject('auth', {
-                authData: {
-                    authenticated: true
-                }
-            });
+            $windowMock.localStorage.setItem('auth', JSON.stringify({
+                authenticated: true
+            }));
 
             $httpBackend.expectPOST('authServerUrl/logout').respond(500, '');
 
@@ -203,7 +153,7 @@ describe('OAuthService', () => {
 
             $httpBackend.flush();
 
-            expect($cookies.getObject('auth')).toBeUndefined();
+            expect($windowMock.localStorage.getItem('auth')).toBeNull();
         });
 
         it('checkToken() should return false when not isLoggedIn', () => {
@@ -221,12 +171,10 @@ describe('OAuthService', () => {
 
             $httpBackend.expectPOST('authServerUrl/oauth/check_token').respond(200, '');
 
-            $cookies.putObject('auth', {
-                authData: {
-                    authenticated: true,
-                    details: {tokenValue: 'xxxx'}
-                }
-            });
+            $windowMock.localStorage.setItem('auth', JSON.stringify({
+                authenticated: true,
+                details: {tokenValue: 'xxxx'}
+            }));
 
             var result = service.checkToken();
             $httpBackend.flush();
@@ -241,12 +189,10 @@ describe('OAuthService', () => {
 
             $httpBackend.expectPOST('authServerUrl/oauth/check_token').respond(500, '');
 
-            $cookies.putObject('auth', {
-                authData: {
-                    authenticated: true,
-                    details: {tokenValue: 'xxxx'}
-                }
-            });
+            $windowMock.localStorage.setItem('auth', JSON.stringify({
+                authenticated: true,
+                details: {tokenValue: 'xxxx'}
+            }));
 
             var result = service.checkToken();
             $httpBackend.flush();
@@ -259,11 +205,9 @@ describe('OAuthService', () => {
         it('isLoggedIn() should return true when isAuthenticated', () => {
             let service = makeService();
 
-            $cookies.putObject('auth', {
-                authData: {
-                    authenticated: true
-                }
-            });
+            $windowMock.localStorage.setItem('auth', JSON.stringify({
+                authenticated: true
+            }));
 
             let result = service.isLoggedIn();
 
@@ -281,12 +225,10 @@ describe('OAuthService', () => {
         it('getUsername() should return username when isAuthenticated', () => {
             let service = makeService();
 
-            $cookies.putObject('auth', {
-                authData: {
-                    authenticated: true,
-                    name: 'Reto Lehmann'
-                }
-            });
+            $windowMock.localStorage.setItem('auth', JSON.stringify({
+                authenticated: true,
+                name: 'Reto Lehmann'
+            }));
 
             let result = service.getUsername();
 

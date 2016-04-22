@@ -8,7 +8,6 @@
  * @since 23.10.2015, 2015.
  */
 import MessagesModule from './messages';
-import MessagesComponent from './messages.component';
 import MessagesController from './messages.controller';
 import MessagesService from './messages.service';
 import MessagesTemplate from './messages.html';
@@ -145,19 +144,4 @@ describe('Messages', () => {
         });
     });
 
-    describe('Module', () => {
-        let component = new MessagesComponent();
-
-        it('includes the intended template', () => {
-            expect(component.template).toBe(MessagesTemplate);
-        });
-
-        it('uses `controllerAs` syntax', () => {
-            expect(component.controllerAs).not.toBeNull();
-        });
-
-        it('invokes the right controller', () => {
-            expect(component.controller).toBe(MessagesController);
-        });
-    });
 });

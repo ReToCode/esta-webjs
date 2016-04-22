@@ -9,7 +9,6 @@
  */
 import AboutModule from './about';
 import AboutController from './about.controller';
-import AboutComponent from './about.component';
 import AboutTemplate from './about.html';
 
 describe('About', () => {
@@ -74,35 +73,20 @@ describe('About', () => {
 
     describe('Template', () => {
         it('has name in template [aboutMessage]', () => {
-            expect(AboutTemplate).toMatch(/{{\s?vm\.aboutMessage\s?}}/g);
+            expect(AboutTemplate).toMatch(/{{\s?\$ctrl\.aboutMessage\s?}}/g);
         });
         it('has name in template [posts.length]', () => {
-            expect(AboutTemplate).toMatch(/{{\s?vm\.posts\.length\s?}}/g);
+            expect(AboutTemplate).toMatch(/{{\s?\$ctrl\.posts\.length\s?}}/g);
         });
         it('has name in template [vm.posts[0].title]', () => {
-            expect(AboutTemplate).toMatch(/{{\s?vm\.posts\[0\]\.title\s?}}/g);
+            expect(AboutTemplate).toMatch(/{{\s?\$ctrl\.posts\[0\]\.title\s?}}/g);
         });
         it('has name in template [vm.postById.id]', () => {
-            expect(AboutTemplate).toMatch(/{{\s?vm\.postById\.id\s?}}/g);
+            expect(AboutTemplate).toMatch(/{{\s?\$ctrl\.postById\.id\s?}}/g);
         });
         it('has name in template [vm.postById.title]', () => {
-            expect(AboutTemplate).toMatch(/{{\s?vm\.postById\.title\s?}}/g);
+            expect(AboutTemplate).toMatch(/{{\s?\$ctrl\.postById\.title\s?}}/g);
         });
     });
 
-    describe('Component', () => {
-        let component = new AboutComponent();
-
-        it('includes the intended template', () => {
-            expect(component.template).toBe(AboutTemplate);
-        });
-
-        it('uses `controllerAs` syntax', () => {
-            expect(component.controllerAs).not.toBeNull();
-        });
-
-        it('invokes the right controller', () => {
-            expect(component.controller).toBe(AboutController);
-        });
-    });
 });

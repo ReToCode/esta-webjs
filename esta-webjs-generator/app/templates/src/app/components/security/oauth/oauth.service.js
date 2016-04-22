@@ -4,7 +4,7 @@
 class OAuthService {
 
     /*@ngInject*/
-    constructor($http, config, $cookies, $log, $location, $window,
+    constructor($http, config, $log, $location, $window,
                 $httpParamSerializer, messagesService,
                 $translate, $q) {
 
@@ -15,7 +15,6 @@ class OAuthService {
         this.config = config;
         this.messagesService = messagesService;
         this.$log = $log;
-        this.$cookies = $cookies;
         this.$translate = $translate;
         this.$q = $q;
     }
@@ -37,8 +36,8 @@ class OAuthService {
     }
 
     /**
-     * Loggt den User aus. Ruft dazu den Login-Server auf um das Login-Cookie loeschen zu lassen
-     * und entfernt das lokale Auth-Cookie.
+     * Loggt den User aus. Ruft dazu den Auth-Server auf um dessen Session-Cookie zu loeschen
+     * und entfernt die Auth-Daten im LocalStorage.
      */
     logout() {
         let service = this;
@@ -50,40 +49,31 @@ class OAuthService {
 
         service.$http.post(service.config.authServerUrl + 'logout')
             .success(() => {
-                service.$cookies.remove('auth');
+                service.$window.localStorage.removeItem('auth');
                 service.$location.path('/');
             }).error(() => {
-                service.$cookies.remove('auth');
+            service.$window.localStorage.removeItem('auth');
                 service.$location.path('/');
             });
     }
 
     /**
      * Diese Methode behandelt den Callback nach dem Redirect auf den Auth-Server
-     * - Prueft ob ein Temp-Token (&code=xxxxxx) in der URL ist.
-     * - Nimmt andernfalls den Code aus der URL entgegen und ruft die Daten vom Login-Server ab.
-     * - Speichert die Login-Daten in einem Cookie ab.
+     * - Prueft ob ein Access-Token (&access_token=xxxxxx) in der URL ist.
+     * - Nimmt das Access-Token aus der URL entgegen und ruft die Daten vom Login-Server ab.
+     * - Speichert die Login-Daten im LocalStorage ab.
      */
-    handleCallback() {
+    handleCallback(oauthData) {
         let service = this;
-        let tempCode = OAuthService._getParameterByName('code');
+        let accessToken = OAuthService._getParameterByName(oauthData, 'access_token');
 
-        service.$log.debug('Found a temp-code, now trying to get an access-token');
-
-        service.$http.post(service.config.authServerUrl + 'oauth/token',
-            service.$httpParamSerializer({
-                'grant_type': 'authorization_code',
-                'client_id': service.config.authClientId,
-                'code': tempCode,
-                'redirect_uri': service.config.authRedirectUrl
-            }),
-            {
-                headers: service._getAppAuthHeader()
-            }).success(response => {
-                service._handleLoginResponse(response);
-            }).error(err => {
-                service._handleErrorResponse(err, true);
-            });
+        if (accessToken) {
+            service.$log.debug('Found a accessToken');
+            service._handleLoginResponse(accessToken);
+        } else {
+            service.$log.error('error during login: ', oauthData);
+            service._handleErrorResponse();
+        }
     }
 
     /**
@@ -98,7 +88,7 @@ class OAuthService {
             defer.resolve(false);
         } else {
             service.$http.post(service.config.authServerUrl + 'oauth/check_token',
-                service.$httpParamSerializer({token: service._getAuthData().details.tokenValue}),
+                service.$httpParamSerializer({token: OAuthService._getAuthData(service.$window).details.tokenValue}),
                 {
                     headers: service._getAppAuthHeader()
                 })
@@ -120,7 +110,7 @@ class OAuthService {
      * @returns {boolean} Eingeloggt?
      */
     isLoggedIn() {
-        return !!this._getAuthData().authenticated;
+        return !!OAuthService._getAuthData(this.$window).authenticated;
     }
 
     /**
@@ -129,7 +119,7 @@ class OAuthService {
      */
     getUsername() {
         if (this.isLoggedIn()) {
-            return this._getAuthData().name;
+            return OAuthService._getAuthData(this.$window).name;
         } else {
             return '';
         }
@@ -137,24 +127,23 @@ class OAuthService {
 
     /**
      * Falls ein access_token enthalten ist, werden die Benutzerdaten geladen.
-     * @param response Die Antwort vom token Aufruf.
+     * @param accessToken Das Access-Token.
      * @private
      */
-    _handleLoginResponse(response) {
+    _handleLoginResponse(accessToken) {
         let service = this;
 
-        if (response && response.access_token) {
-
+        if (accessToken) {
             service.$log.debug('Got an access_token, now trying to get user-info from backend');
 
             service.$http.get(service.config.authServerUrl + 'user', {
-                headers: {'Authorization': 'Bearer ' + response.access_token}
+                headers: {'Authorization': 'Bearer ' + accessToken}
             })
                 .success(userResponse => {
                     if (userResponse) {
-                        service._setAuthData(userResponse);
+                        OAuthService._setAuthData(userResponse, service.$window);
                         // Manuelle URL bauen um den Code im Querystring zu entfernen
-                        service.$window.location.replace([location.protocol, '//', location.host, location.pathname].join(''));
+                        service.$location.path('/');
                     }
                 })
                 .error(err => {
@@ -164,42 +153,34 @@ class OAuthService {
     }
 
     /**
-     * Behandelt eine feherhafte Antwort.
-     * @param error Der Fehler.
-     * @param logError Soll der Fehler geloggt werden?
+     * Behandelt eine feherhafte Login-Antwort.
      * @private
      */
-    _handleErrorResponse(error, logError) {
+    _handleErrorResponse() {
         let service = this;
 
-        if (logError) {
-            service.$log.error('Error while logging in: ', error);
-            service.messagesService.errorMessage(service.$translate.instant('LOGIN_ERROR'), true);
-        }
-
+        service.messagesService.errorMessage(service.$translate.instant('LOGIN_ERROR'), true);
         service.$location.path('/');
     }
 
     /**
-     * Schreibt die authDaten in ein Cookie.
+     * Schreibt die authDaten in den LocalStorage.
      * @param authData Die authDaten.
      * @private
      */
-    _setAuthData(authData) {
-        this.$cookies.putObject('auth', {
-            authData
-        });
+    static _setAuthData(authData, $window) {
+        $window.localStorage.setItem('auth', JSON.stringify(authData));
     }
 
     /**
-     * Liest die authDaten aus dem Cookie.
+     * Liest die authDaten aus dem LocalStorage.
      * @returns {*} AuthDaten oder {}.
      * @private
      */
-    _getAuthData() {
-        let cookie = this.$cookies.getObject('auth');
-        if (cookie && cookie.authData) {
-            return cookie.authData;
+    static _getAuthData($window) {
+        let auth = JSON.parse($window.localStorage.getItem('auth'));
+        if (auth) {
+            return auth;
         } else {
             return {};
         }
@@ -220,13 +201,14 @@ class OAuthService {
     /**
      * Helfermethode um den Query-String zu parsen.
      * @param name Den zu suchenden Namen.
+     * @param queryString Den Query-String.
      * @returns {string} Den gefundenen Wert oder ''.
      * @private
      */
-    static _getParameterByName(name) {
+    static _getParameterByName(queryString, name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
-            results = regex.exec(location.search);
+            results = regex.exec(queryString);
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 }
