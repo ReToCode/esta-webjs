@@ -7,7 +7,6 @@
  * @version: 0.0.2
  * @since 06.11.2015, 2015.
  */
-import 'angular-cookies';
 import OAuthModule from './oauth';
 import OAuthService from './oauth.service';
 
@@ -40,13 +39,15 @@ describe('OAuthService', () => {
 
     beforeEach(window.module(OAuthModule.name));
     beforeEach(inject((_$rootScope_, _$httpBackend_, _$http_, _$log_,
-                       _$location_, _$httpParamSerializer_, _$q_) => {
+                       _$location_, _$httpParamSerializer_, _$q_, _$window_) => {
 
         $rootScope = _$rootScope_;
         $httpBackend = _$httpBackend_;
         $location = _$location_;
 
-        localStorage.clear();
+        $windowMock.localStorage = _$window_.localStorage;
+
+        $windowMock.localStorage.clear();
 
         makeService = () => {
             return new OAuthService(_$http_, configMock, _$log_, $location,
@@ -80,7 +81,7 @@ describe('OAuthService', () => {
 
             let service = makeService();
 
-            localStorage.setItem('auth', JSON.stringify({
+            $windowMock.localStorage.setItem('auth', JSON.stringify({
                 authenticated: true
             }));
 
@@ -99,7 +100,7 @@ describe('OAuthService', () => {
             service.handleCallback('&access_token=test');
             $httpBackend.flush();
 
-            expect(JSON.parse(localStorage.getItem('auth')).name).toBe('Reto Lehmann');
+            expect(JSON.parse($windowMock.localStorage.getItem('auth')).name).toBe('Reto Lehmann');
         });
 
         it('handleCallback() should not save authData to localStorage when userdata-POST fails', () => {
@@ -109,7 +110,7 @@ describe('OAuthService', () => {
 
             service.handleCallback('&error=Invalid grant');
 
-            expect(JSON.parse(localStorage.getItem('auth'))).toBeNull();
+            expect(JSON.parse($windowMock.localStorage.getItem('auth'))).toBeNull();
             expect(messagesServiceMock.errorMessage).toHaveBeenCalledWith('Login fehlgeschlagen', true);
         });
 
@@ -126,7 +127,7 @@ describe('OAuthService', () => {
         it('logout() should POST to logout and remove authData from localStorage when loggedIn', () => {
             let service = makeService();
 
-            localStorage.setItem('auth', JSON.stringify({
+            $windowMock.localStorage.setItem('auth', JSON.stringify({
                 authenticated: true
             }));
 
@@ -142,7 +143,7 @@ describe('OAuthService', () => {
         it('logout() should remove authData from localStorage when loggedIn and POST fails', () => {
             let service = makeService();
 
-            localStorage.setItem('auth', JSON.stringify({
+            $windowMock.localStorage.setItem('auth', JSON.stringify({
                 authenticated: true
             }));
 
@@ -152,7 +153,7 @@ describe('OAuthService', () => {
 
             $httpBackend.flush();
 
-            expect(localStorage.getItem('auth')).toBeNull();
+            expect($windowMock.localStorage.getItem('auth')).toBeNull();
         });
 
         it('checkToken() should return false when not isLoggedIn', () => {
@@ -170,7 +171,7 @@ describe('OAuthService', () => {
 
             $httpBackend.expectPOST('authServerUrl/oauth/check_token').respond(200, '');
 
-            localStorage.setItem('auth', JSON.stringify({
+            $windowMock.localStorage.setItem('auth', JSON.stringify({
                 authenticated: true,
                 details: {tokenValue: 'xxxx'}
             }));
@@ -188,7 +189,7 @@ describe('OAuthService', () => {
 
             $httpBackend.expectPOST('authServerUrl/oauth/check_token').respond(500, '');
 
-            localStorage.setItem('auth', JSON.stringify({
+            $windowMock.localStorage.setItem('auth', JSON.stringify({
                 authenticated: true,
                 details: {tokenValue: 'xxxx'}
             }));
@@ -204,7 +205,7 @@ describe('OAuthService', () => {
         it('isLoggedIn() should return true when isAuthenticated', () => {
             let service = makeService();
 
-            localStorage.setItem('auth', JSON.stringify({
+            $windowMock.localStorage.setItem('auth', JSON.stringify({
                 authenticated: true
             }));
 
@@ -224,7 +225,7 @@ describe('OAuthService', () => {
         it('getUsername() should return username when isAuthenticated', () => {
             let service = makeService();
 
-            localStorage.setItem('auth', JSON.stringify({
+            $windowMock.localStorage.setItem('auth', JSON.stringify({
                 authenticated: true,
                 name: 'Reto Lehmann'
             }));

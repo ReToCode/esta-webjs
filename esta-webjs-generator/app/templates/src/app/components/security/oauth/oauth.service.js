@@ -49,10 +49,10 @@ class OAuthService {
 
         service.$http.post(service.config.authServerUrl + 'logout')
             .success(() => {
-                localStorage.removeItem('auth');
+                service.$window.localStorage.removeItem('auth');
                 service.$location.path('/');
             }).error(() => {
-            localStorage.removeItem('auth');
+            service.$window.localStorage.removeItem('auth');
                 service.$location.path('/');
             });
     }
@@ -88,7 +88,7 @@ class OAuthService {
             defer.resolve(false);
         } else {
             service.$http.post(service.config.authServerUrl + 'oauth/check_token',
-                service.$httpParamSerializer({token: OAuthService._getAuthData().details.tokenValue}),
+                service.$httpParamSerializer({token: OAuthService._getAuthData(service.$window).details.tokenValue}),
                 {
                     headers: service._getAppAuthHeader()
                 })
@@ -110,7 +110,7 @@ class OAuthService {
      * @returns {boolean} Eingeloggt?
      */
     isLoggedIn() {
-        return !!OAuthService._getAuthData().authenticated;
+        return !!OAuthService._getAuthData(this.$window).authenticated;
     }
 
     /**
@@ -119,7 +119,7 @@ class OAuthService {
      */
     getUsername() {
         if (this.isLoggedIn()) {
-            return OAuthService._getAuthData().name;
+            return OAuthService._getAuthData(this.$window).name;
         } else {
             return '';
         }
@@ -141,7 +141,7 @@ class OAuthService {
             })
                 .success(userResponse => {
                     if (userResponse) {
-                        OAuthService._setAuthData(userResponse);
+                        OAuthService._setAuthData(userResponse, service.$window);
                         // Manuelle URL bauen um den Code im Querystring zu entfernen
                         service.$location.path('/');
                     }
@@ -168,8 +168,8 @@ class OAuthService {
      * @param authData Die authDaten.
      * @private
      */
-    static _setAuthData(authData) {
-        localStorage.setItem('auth', JSON.stringify(authData));
+    static _setAuthData(authData, $window) {
+        $window.localStorage.setItem('auth', JSON.stringify(authData));
     }
 
     /**
@@ -177,8 +177,8 @@ class OAuthService {
      * @returns {*} AuthDaten oder {}.
      * @private
      */
-    static _getAuthData() {
-        let auth = JSON.parse(localStorage.getItem('auth'));
+    static _getAuthData($window) {
+        let auth = JSON.parse($window.localStorage.getItem('auth'));
         if (auth) {
             return auth;
         } else {
