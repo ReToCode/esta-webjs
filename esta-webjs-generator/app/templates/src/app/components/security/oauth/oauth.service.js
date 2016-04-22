@@ -4,7 +4,7 @@
 class OAuthService {
 
     /*@ngInject*/
-    constructor($http, config, $cookies, $log, $location, $window,
+    constructor($http, config, $log, $location, $window,
                 $httpParamSerializer, messagesService,
                 $translate, $q) {
 
@@ -15,7 +15,6 @@ class OAuthService {
         this.config = config;
         this.messagesService = messagesService;
         this.$log = $log;
-        this.$cookies = $cookies;
         this.$translate = $translate;
         this.$q = $q;
     }
@@ -37,8 +36,8 @@ class OAuthService {
     }
 
     /**
-     * Loggt den User aus. Ruft dazu den Login-Server auf um das Login-Cookie loeschen zu lassen
-     * und entfernt das lokale Auth-Cookie.
+     * Loggt den User aus. Ruft dazu den Auth-Server auf um dessen Session-Cookie zu loeschen
+     * und entfernt die Auth-Daten im LocalStorage.
      */
     logout() {
         let service = this;
@@ -50,10 +49,10 @@ class OAuthService {
 
         service.$http.post(service.config.authServerUrl + 'logout')
             .success(() => {
-                service.$cookies.remove('auth');
+                service.$window.localStorage.removeItem('auth');
                 service.$location.path('/');
             }).error(() => {
-                service.$cookies.remove('auth');
+            service.$window.localStorage.removeItem('auth');
                 service.$location.path('/');
             });
     }
@@ -62,7 +61,7 @@ class OAuthService {
      * Diese Methode behandelt den Callback nach dem Redirect auf den Auth-Server
      * - Prueft ob ein Access-Token (&access_token=xxxxxx) in der URL ist.
      * - Nimmt das Access-Token aus der URL entgegen und ruft die Daten vom Login-Server ab.
-     * - Speichert die Login-Daten in einem Cookie ab.
+     * - Speichert die Login-Daten im LocalStorage ab.
      */
     handleCallback(oauthData) {
         let service = this;
@@ -72,7 +71,7 @@ class OAuthService {
             service.$log.debug('Found a accessToken');
             service._handleLoginResponse(accessToken);
         } else {
-            console.log('error during login: ', oauthData);
+            service.$log.error('error during login: ', oauthData);
             service._handleErrorResponse();
         }
     }
@@ -89,7 +88,7 @@ class OAuthService {
             defer.resolve(false);
         } else {
             service.$http.post(service.config.authServerUrl + 'oauth/check_token',
-                service.$httpParamSerializer({token: service._getAuthData().details.tokenValue}),
+                service.$httpParamSerializer({token: OAuthService._getAuthData(service.$window).details.tokenValue}),
                 {
                     headers: service._getAppAuthHeader()
                 })
@@ -111,7 +110,7 @@ class OAuthService {
      * @returns {boolean} Eingeloggt?
      */
     isLoggedIn() {
-        return !!this._getAuthData().authenticated;
+        return !!OAuthService._getAuthData(this.$window).authenticated;
     }
 
     /**
@@ -120,7 +119,7 @@ class OAuthService {
      */
     getUsername() {
         if (this.isLoggedIn()) {
-            return this._getAuthData().name;
+            return OAuthService._getAuthData(this.$window).name;
         } else {
             return '';
         }
@@ -142,7 +141,7 @@ class OAuthService {
             })
                 .success(userResponse => {
                     if (userResponse) {
-                        service._setAuthData(userResponse);
+                        OAuthService._setAuthData(userResponse, service.$window);
                         // Manuelle URL bauen um den Code im Querystring zu entfernen
                         service.$location.path('/');
                     }
@@ -165,25 +164,23 @@ class OAuthService {
     }
 
     /**
-     * Schreibt die authDaten in ein Cookie.
+     * Schreibt die authDaten in den LocalStorage.
      * @param authData Die authDaten.
      * @private
      */
-    _setAuthData(authData) {
-        this.$cookies.putObject('auth', {
-            authData
-        });
+    static _setAuthData(authData, $window) {
+        $window.localStorage.setItem('auth', JSON.stringify(authData));
     }
 
     /**
-     * Liest die authDaten aus dem Cookie.
+     * Liest die authDaten aus dem LocalStorage.
      * @returns {*} AuthDaten oder {}.
      * @private
      */
-    _getAuthData() {
-        let cookie = this.$cookies.getObject('auth');
-        if (cookie && cookie.authData) {
-            return cookie.authData;
+    static _getAuthData($window) {
+        let auth = JSON.parse($window.localStorage.getItem('auth'));
+        if (auth) {
+            return auth;
         } else {
             return {};
         }

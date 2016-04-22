@@ -22,7 +22,7 @@ var getDependencyVersionsFromPackageJson = function(yo) {
         result.push(key + '@' + packageJson.dependencies[key]);
     });
     return result;
-}
+};
 
 module.exports = generators.Base.extend({
     /**
@@ -279,6 +279,7 @@ module.exports = generators.Base.extend({
         }
 
         yo.spawnCommand('npm', ['uninstall', 'angular-bootstrap-npm', '--save']);
+        yo.spawnCommand('npm', ['uninstall', 'angular-cookies', '--save']);
     },
 
     /**
@@ -295,9 +296,26 @@ module.exports = generators.Base.extend({
 
         yo.fs.delete(yo.destinationPath('src/app/components/security/interceptor/interceptor.service.js'));
         yo.fs.delete(yo.destinationPath('src/app/components/security/interceptor/interceptor.spec.js'));
+
         yo.fs.commit(function() {
             yo.fs.copy(yo.templatePath('src/app/components/security/interceptor/interceptor.service.js'), yo.destinationPath('src/app/components/security/interceptor/interceptor.service.js'));
             yo.fs.copy(yo.templatePath('src/app/components/security/interceptor/interceptor.spec.js'), yo.destinationPath('src/app/components/security/interceptor/interceptor.spec.js'));
+        });
+
+        yo.fs.delete(yo.destinationPath('src/app/components/security/oauth/oauth.js'));
+        yo.fs.delete(yo.destinationPath('src/app/components/security/oauth/oauth.service.js'));
+        yo.fs.delete(yo.destinationPath('src/app/components/security/oauth/oauth.spec.js'));
+
+        yo.fs.commit(function() {
+            yo.fs.copy(yo.templatePath('src/app/components/security/oauth/oauth.js'), yo.destinationPath('src/app/components/security/oauth/oauth.js'));
+            yo.fs.copy(yo.templatePath('src/app/components/security/oauth/oauth.service.js'), yo.destinationPath('src/app/components/security/oauth/oauth.service.js'));
+            yo.fs.copy(yo.templatePath('src/app/components/security/oauth/oauth.spec.js'), yo.destinationPath('src/app/components/security/oauth/oauth.spec.js'));
+        });
+
+        yo.fs.delete(yo.destinationPath('.jshintrc'));
+
+        yo.fs.commit(function() {
+            yo.fs.copy(yo.templatePath('.jshintrc'), yo.destinationPath('.jshintrc'));
         });
     },
 

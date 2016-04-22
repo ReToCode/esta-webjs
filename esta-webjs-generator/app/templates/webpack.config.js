@@ -13,7 +13,7 @@ var path = require('path');
 var browserSyncPlugin = require('browser-sync-webpack-plugin');
 var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 var buildPath = path.join(__dirname, 'target/build');
-var HtmlWebpackPlugin = require("html-webpack-plugin");
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webjsConfig = require('./config/shared.build.config');
 
 /**

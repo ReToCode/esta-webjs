@@ -10,7 +10,7 @@
 import angular from 'angular';
 import oAuthService from './oauth.service';
 
-let oAuthModule = angular.module('oAuth', /*@ngInject*/['ngCookies'])
+let oAuthModule = angular.module('oAuth', [])
 
 .service('oAuthService', oAuthService);
 
