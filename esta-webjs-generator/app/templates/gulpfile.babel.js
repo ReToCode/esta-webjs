@@ -87,7 +87,7 @@ gulp.task('test-selenium-webgrid', (done) => {
         configFile: __dirname + '/karma.conf.js',
         hostname: hostname,
         port: externalport,
-        browsers: ['SeleniumFF', 'SeleniumCH', 'SeleniumIE']
+        browsers: ['SeleniumIE']
     }, done).start();
 });
 
