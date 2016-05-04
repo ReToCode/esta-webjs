@@ -84,12 +84,11 @@ module.exports = function (config) {
             'SeleniumIE': {
                 base: 'WebDriver',
                 config: seleniumWebgrid,
-                browserName: 'internet explorer',
-                version: 11,
-                'x-ua-compatible': 'IE=EmulateIE11',
-                platform: 'WINDOWS',
-                pseudoActivityInterval: 30000
-
+                browserName: 'internet explorer'
+                // version: 11,
+                // 'x-ua-compatible': 'IE=EmulateIE11',
+                // platform: 'WINDOWS',
+                // pseudoActivityInterval: 30000
             }
         },
 
