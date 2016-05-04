@@ -85,15 +85,14 @@ module.exports = function (config) {
                 base: 'WebDriver',
                 config: seleniumWebgrid,
                 browserName: 'internet explorer',
-                // version: 11,
-                'x-ua-compatible': 'IE=EmulateIE11'
+                'x-ua-compatible': 'IE=edge'
             }
         },
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: ['PhantomJS'], // Test auf dem PhantomJS
-        //browsers: ['SeleniumFF', 'SeleniumIE', 'SeleniumCH'], // Test auf dem Selenium-Webgrid
+        // browsers: ['SeleniumFF', 'SeleniumCH', 'SeleniumIE'], // Test auf dem Selenium-Webgrid
 
         // if true, Karma runs tests once and exits
         singleRun: true,

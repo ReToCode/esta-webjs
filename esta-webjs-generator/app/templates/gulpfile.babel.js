@@ -87,7 +87,7 @@ gulp.task('test-selenium-webgrid', (done) => {
         configFile: __dirname + '/karma.conf.js',
         hostname: hostname,
         port: externalport,
-        browsers: ['SeleniumIE']
+        browsers: ['SeleniumFF', 'SeleniumCH'] // IE ausgeschaltet aufgrund Bug im Selenium-Grid: 'SeleniumIE'
     }, done).start();
 });
 
