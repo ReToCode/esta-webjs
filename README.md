@@ -29,12 +29,12 @@ We introduced a few tasks to create common types:
 
 ### To create a component
 
-`yo esta-webjs component <name>`
+`yo esta-webjs:component <name>`
 
 Creates the directory and all files for a component.
 
 ### To create a service
 
-`yo esta-webjs service <name>`
+`yo esta-webjs:service <name>`
 
 Creates the directory and all files for a service.
