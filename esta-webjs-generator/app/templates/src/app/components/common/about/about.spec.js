@@ -11,7 +11,7 @@ import AboutModule from './about';
 import AboutController from './about.controller';
 import AboutTemplate from './about.html';
 
-describe('about.controller', () => {
+describe('about.about.controller', () => {
     let $rootScope, makeController, translateMock;
 
     beforeEach(window.module(AboutModule.name));
@@ -38,11 +38,11 @@ describe('about.controller', () => {
         };
     }));
 
-    describe('about.module', () => {
+    describe('Module', () => {
         // top-level specs: i.e., routes, injection, naming
     });
 
-    describe('about.controller', () => {
+    describe('Controller', () => {
         it('has a name property [aboutMessage]', () => {
             let controller = makeController();
             expect(controller.aboutMessage).toBe('Über dieses Template');
@@ -71,7 +71,7 @@ describe('about.controller', () => {
         });
     });
 
-    describe('about.template', () => {
+    describe('Template', () => {
         it('has name in template [aboutMessage]', () => {
             expect(AboutTemplate).toMatch(/{{\s?\$ctrl\.aboutMessage\s?}}/g);
         });

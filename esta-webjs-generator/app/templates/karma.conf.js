@@ -42,7 +42,7 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'spec.bundle.js': ['webpack', 'sourcemap', 'coverage']
+            'spec.bundle.js': ['webpack', 'sourcemap', 'sourcemap-writer', 'coverage']
         },
 
         webpack: {
@@ -57,7 +57,7 @@ module.exports = function (config) {
         },
 
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress', 'junit', 'coverage'],
+        reporters: ['progress', 'junit', 'coverage', 'karma-remap-istanbul'],
 
         // enable colors in the output
         colors: true,
@@ -104,18 +104,28 @@ module.exports = function (config) {
             'karma-coverage',
             'karma-webpack',
             'karma-sourcemap-loader',
-            'karma-webdriver-launcher'
+            'karma-webdriver-launcher',
+            'karma-remap-istanbul',
+            'karma-sourcemap-writer'
         ],
 
         // Coverage & JUnit Report fuer SonarQube
         junitReporter: {
-            outputDir: 'target/surefire', suite: 'models'
+            outputDir: 'target/surefire', suite: 'components'
         }, coverageReporter: {
             reporters: [
                 {
-                    type: 'lcov', dir: 'target/surefire', subdir: '.'
+                    type: 'json', dir: 'target/surefire', subdir: '.', file: 'coverage.json'
                 }
             ]
+        },
+        remapIstanbulReporter: {
+            src: 'target/surefire/coverage.json',
+            reports: {
+                lcovonly: 'target/surefire/lcov.info'
+            },
+            timeoutNotCreated: 5000, // default value
+            timeoutNoMoreFiles: 1000 // default value
         }
     });
 };
