@@ -70,10 +70,10 @@ gulp.task('serve', () => {
             colors: true
         }
     }).listen(3000, 'localhost', function (err) {
-            if (err) {
-                console.error(err);
-            }
-        });
+        if (err) {
+            console.error(err);
+        }
+    });
 });
 
 /**
@@ -89,7 +89,15 @@ gulp.task('test-selenium-webgrid', (done) => {
         hostname: hostname,
         port: externalport,
         browsers: ['SeleniumFF', 'SeleniumCH'] // IE ausgeschaltet aufgrund Bug im Selenium-Grid: 'SeleniumIE'
-    }, done).start();
+    }, function () {
+        // If tests are done, remap coverage file
+        return gulp.src('target/coverage/coverage.json')
+            .pipe(remapIstanbul({
+                reports: {
+                    'lcovonly': 'target/surefire/lcov.info'
+                }
+            }));
+    }).start();
 });
 
 /**
@@ -108,23 +116,15 @@ gulp.task('test-phantomjs', (done) => {
     }, done).start();
 });
 
-/**
- * Remap der Coverage mit istanbul
- */
-gulp.task('remap-coverage', () => {
-    return gulp.src('target/coverage/coverage.json')
-        .pipe(remapIstanbul({
-            reports: {
-                'lcovonly': 'target/surefire/lcov.info'
-            }
-        }));
-});
 
 /**
  * Gulp-Task: Fuehrt ESDoc aus um die Code-Dokumentation zu erstellen
  */
 gulp.task('doc', () => {
-    return gulp.src(root).pipe(esdoc({destination: paths.documentation, index: path.join(root, 'README.md')}));
+    return gulp.src(root).pipe(esdoc({
+        destination: paths.documentation,
+        index: path.join(root, 'README.md')
+    }));
 });
 
 /**
