@@ -57,14 +57,14 @@ module.exports = function (config) {
         },
 
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress', 'junit', 'coverage', 'karma-remap-istanbul'],
+        reporters: ['progress', 'junit', 'coverage'],
 
         // enable colors in the output
         colors: true,
 
         // level of logging
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-        logLevel: config.LOG_DEBUG,
+        logLevel: config.LOG_INFO,
 
         // toggle whether to watch files and rerun tests upon incurring changes
         autoWatch: false,
@@ -105,7 +105,6 @@ module.exports = function (config) {
             'karma-webpack',
             'karma-sourcemap-loader',
             'karma-webdriver-launcher',
-            'karma-remap-istanbul',
             'karma-sourcemap-writer'
         ],
 
@@ -118,14 +117,6 @@ module.exports = function (config) {
                     type: 'json', dir: 'target', subdir: 'coverage', file: 'coverage.json'
                 }
             ]
-        },
-        remapIstanbulReporter: {
-            src: 'target/coverage/coverage.json',
-            reports: {
-                lcovonly: 'target/surefire/lcov.info'
-            },
-            timeoutNotCreated: 1000,
-            timeoutNoMoreFiles: 1000
         }
     });
 };

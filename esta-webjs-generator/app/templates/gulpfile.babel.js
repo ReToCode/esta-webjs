@@ -14,6 +14,7 @@ import WebpackDevServer from 'webpack-dev-server';
 import karma    from 'karma';
 import esdoc    from 'gulp-esdoc';
 import ip from 'ip';
+import remapIstanbul from 'remap-istanbul/lib/gulpRemapIstanbul';
 
 let webpackConfig = require('./webpack.config');
 let root = 'src';
@@ -108,6 +109,18 @@ gulp.task('test-phantomjs', (done) => {
 });
 
 /**
+ * Remap der Coverage mit istanbul
+ */
+gulp.task('remap-coverage', () => {
+    return gulp.src('target/coverage/coverage.json')
+        .pipe(remapIstanbul({
+            reports: {
+                'lcovonly': 'target/surefire/lcov.info'
+            }
+        }));
+});
+
+/**
  * Gulp-Task: Fuehrt ESDoc aus um die Code-Dokumentation zu erstellen
  */
 gulp.task('doc', () => {
@@ -121,7 +134,7 @@ gulp.task('doc', () => {
  * - Erstellt das Webpack-Bundle und kopiert es nach /target/build
  * - Kopiert index.html nach /target/build
  */
-gulp.task('build', ['test-selenium-webgrid', 'doc'], (done) => {
+gulp.task('build', ['test-selenium-webgrid', 'remap-coverage', 'doc'], (done) => {
     gulp.src(path.join(root, 'index.html')).pipe(gulp.dest(paths.build));
 
     return webpack(webpackConfig.production, done);
