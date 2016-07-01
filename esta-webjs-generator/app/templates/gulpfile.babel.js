@@ -91,12 +91,13 @@ gulp.task('test-selenium-webgrid', (done) => {
         browsers: ['SeleniumFF', 'SeleniumCH'] // IE ausgeschaltet aufgrund Bug im Selenium-Grid: 'SeleniumIE'
     }, function () {
         // If tests are done, remap coverage file
-        return gulp.src('target/coverage/coverage.json')
+        gulp.src('target/coverage/coverage.json')
             .pipe(remapIstanbul({
                 reports: {
                     'lcovonly': 'target/surefire/lcov.info'
                 }
             }));
+        done();
     }).start();
 });
 
