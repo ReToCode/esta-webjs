@@ -38,11 +38,11 @@ describe('About', () => {
         };
     }));
 
-    describe('Module', () => {
+    describe('about.module', () => {
         // top-level specs: i.e., routes, injection, naming
     });
 
-    describe('Controller', () => {
+    describe('about.controller', () => {
         it('has a name property [aboutMessage]', () => {
             let controller = makeController();
             expect(controller.aboutMessage).toBe('Über dieses Template');
@@ -71,7 +71,7 @@ describe('About', () => {
         });
     });
 
-    describe('Template', () => {
+    describe('about.template', () => {
         it('has name in template [aboutMessage]', () => {
             expect(AboutTemplate).toMatch(/{{\s?\$ctrl\.aboutMessage\s?}}/g);
         });
