@@ -124,7 +124,7 @@ module.exports = function (config) {
             reports: {
                 lcovonly: 'target/surefire/lcov.info'
             },
-            timeoutNotCreated: 5000,
+            timeoutNotCreated: 1000,
             timeoutNoMoreFiles: 1000
         }
     });
