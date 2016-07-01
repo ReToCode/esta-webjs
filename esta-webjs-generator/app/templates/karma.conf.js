@@ -64,7 +64,7 @@ module.exports = function (config) {
 
         // level of logging
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-        logLevel: config.LOG_INFO,
+        logLevel: config.LOG_DEBUG,
 
         // toggle whether to watch files and rerun tests upon incurring changes
         autoWatch: false,
@@ -115,17 +115,17 @@ module.exports = function (config) {
         }, coverageReporter: {
             reporters: [
                 {
-                    type: 'json', dir: 'target/surefire', subdir: '.', file: 'coverage.json'
+                    type: 'json', dir: 'target', subdir: 'coverage', file: 'coverage.json'
                 }
             ]
         },
         remapIstanbulReporter: {
-            src: 'target/surefire/coverage.json',
+            src: 'target/coverage/coverage.json',
             reports: {
                 lcovonly: 'target/surefire/lcov.info'
             },
-            timeoutNotCreated: 8000, // default value
-            timeoutNoMoreFiles: 5000 // default value
+            timeoutNotCreated: 5000,
+            timeoutNoMoreFiles: 1000
         }
     });
 };
