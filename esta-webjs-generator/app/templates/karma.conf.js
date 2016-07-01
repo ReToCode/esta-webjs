@@ -111,7 +111,7 @@ module.exports = function (config) {
 
         // Coverage & JUnit Report fuer SonarQube
         junitReporter: {
-            outputDir: 'target/surefire', suite: 'components'
+            outputDir: 'target/surefire', suite: 'unit'
         }, coverageReporter: {
             reporters: [
                 {
@@ -124,8 +124,8 @@ module.exports = function (config) {
             reports: {
                 lcovonly: 'target/surefire/lcov.info'
             },
-            timeoutNotCreated: 5000, // default value
-            timeoutNoMoreFiles: 1000 // default value
+            timeoutNotCreated: 8000, // default value
+            timeoutNoMoreFiles: 5000 // default value
         }
     });
 };

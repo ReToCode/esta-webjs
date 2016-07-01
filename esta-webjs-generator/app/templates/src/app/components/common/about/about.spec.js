@@ -11,7 +11,7 @@ import AboutModule from './about';
 import AboutController from './about.controller';
 import AboutTemplate from './about.html';
 
-describe('about.about.controller', () => {
+describe('About', () => {
     let $rootScope, makeController, translateMock;
 
     beforeEach(window.module(AboutModule.name));
