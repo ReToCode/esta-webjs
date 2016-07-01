@@ -5,6 +5,7 @@ target
 .project
 .idea
 *.iml
+spec.bundle.js.map
 
 target/
 node_modules/
