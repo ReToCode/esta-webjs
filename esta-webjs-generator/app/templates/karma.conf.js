@@ -98,10 +98,10 @@ module.exports = function (config) {
         singleRun: true,
 
         plugins: [
-            'karma-junit-reporter',
             'karma-jasmine',
-            'karma-coverage',
             'karma-phantomjs-launcher',
+            'karma-junit-reporter',
+            'karma-coverage',
             'karma-webpack',
             'karma-sourcemap-loader',
             'karma-webdriver-launcher'
@@ -109,7 +109,7 @@ module.exports = function (config) {
 
         // Coverage & JUnit Report fuer SonarQube
         junitReporter: {
-            outputDir: 'target/surefire', suite: 'unit'
+            outputDir: 'target/surefire', suite: 'models'
         }, coverageReporter: {
             reporters: [
                 {

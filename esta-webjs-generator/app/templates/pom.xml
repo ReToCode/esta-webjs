@@ -12,7 +12,7 @@
     <properties>
         <sonar.language>js</sonar.language>
         <sonar.profile>sbb-it-vorgabe</sonar.profile>
-        <sonar.sources>src/app</sonar.sources>
+        <sonar.sources>src/app/components</sonar.sources>
         <sonar.exclusions>**.spec.js</sonar.exclusions>
         <sonar.coverage.exclusions>**.spec.js</sonar.coverage.exclusions>
         <sonar.javascript.lcov.reportPath>target/surefire/lcov.info</sonar.javascript.lcov.reportPath>
