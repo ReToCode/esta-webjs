@@ -129,8 +129,6 @@ gulp.task('doc', () => {
  * - Kopiert index.html nach /target/build
  */
 gulp.task('build', ['test-selenium-webgrid', 'doc'], (done) => {
-    // gulp.src(path.join(root, 'index.html')).pipe(gulp.dest(paths.build));
-
     return webpack(webpackConfig.production, done);
 });
 
