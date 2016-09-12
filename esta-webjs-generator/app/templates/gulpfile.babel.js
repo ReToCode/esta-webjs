@@ -53,13 +53,6 @@ let paths = {
 };
 
 /**
- * Gulp-Task: Kopiert alle statischen Dateien nach /dist
- */
-gulp.task('copyHtml', () => {
-    return gulp.src(path.join(root, 'index.html')).pipe(gulp.dest(paths.output));
-});
-
-/**
  * Gulp-Task: Fuehrt webpack aus und startet den Development-Server
  */
 gulp.task('serve', () => {
@@ -136,12 +129,10 @@ gulp.task('doc', () => {
  * - Kopiert index.html nach /target/build
  */
 gulp.task('build', ['test-selenium-webgrid', 'doc'], (done) => {
-    gulp.src(path.join(root, 'index.html')).pipe(gulp.dest(paths.build));
-
     return webpack(webpackConfig.production, done);
 });
 
 /**
  * Gulp-Task: Standardfall mit 'gulp' kopiert das HTML nach /dist und startet Webserver
  */
-gulp.task('default', ['copyHtml', 'serve']);
+gulp.task('default', ['serve']);
