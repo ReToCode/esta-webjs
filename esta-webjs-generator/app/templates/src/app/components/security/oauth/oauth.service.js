@@ -4,9 +4,8 @@
 class OAuthService {
 
     /*@ngInject*/
-    constructor($http, config, $log, $location, $window,
-                $httpParamSerializer, messagesService,
-                $translate, $q) {
+    constructor($http, config, $log, $location, $window, $httpParamSerializer, messagesService, $translate,
+                $q) {
 
         this.$http = $http;
         this.$httpParamSerializer = $httpParamSerializer;
@@ -28,8 +27,8 @@ class OAuthService {
 
         if (!service.isLoggedIn()) {
             service.$log.debug('Now redirecting to login-page of auth-server.');
-            service.$window.location.replace(service.config.authServerUrl +
-                service.config.authLoginUrl + encodeURIComponent(service.config.authRedirectUrl));
+            service.$window.location.replace(service.config.authServerUrl + service.config.authLoginUrl +
+                encodeURIComponent(service.config.authRedirectUrl));
         } else {
             service.$location.path('/');
         }
@@ -48,11 +47,11 @@ class OAuthService {
         }
 
         service.$http.post(service.config.authServerUrl + 'logout')
-            .success(() => {
+            .then(() => {
                 service.$window.localStorage.removeItem('auth');
                 service.$location.path('/');
-            }).error(() => {
-            service.$window.localStorage.removeItem('auth');
+            }, () => {
+                service.$window.localStorage.removeItem('auth');
                 service.$location.path('/');
             });
     }
@@ -88,15 +87,14 @@ class OAuthService {
             defer.resolve(false);
         } else {
             service.$http.post(service.config.authServerUrl + 'oauth/check_token',
-                service.$httpParamSerializer({token: OAuthService._getAuthData(service.$window).details.tokenValue}),
-                {
+                service.$httpParamSerializer(
+                    {token: OAuthService._getAuthData(service.$window).details.tokenValue}), {
                     headers: service._getAppAuthHeader()
                 })
-                .success(response => {
-                    service.$log.debug(response);
+                .then(response => {
+                    service.$log.debug(response.data);
                     defer.resolve(true);
-                })
-                .error(err => {
+                }, err => {
                     service.$log.error('Error: Invalid token response.', err);
                     defer.resolve(false);
                 });
@@ -139,14 +137,14 @@ class OAuthService {
             service.$http.get(service.config.authServerUrl + 'user', {
                 headers: {'Authorization': 'Bearer ' + accessToken}
             })
-                .success(userResponse => {
+                .then(response => {
+                    let userResponse = response.data;
                     if (userResponse) {
                         OAuthService._setAuthData(userResponse, service.$window);
                         // Manuelle URL bauen um den Code im Querystring zu entfernen
                         service.$location.path('/');
                     }
-                })
-                .error(err => {
+                }, err => {
                     service._handleErrorResponse(err, true);
                 });
         }
@@ -207,8 +205,7 @@ class OAuthService {
      */
     static _getParameterByName(queryString, name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
-            results = regex.exec(queryString);
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'), results = regex.exec(queryString);
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 }
