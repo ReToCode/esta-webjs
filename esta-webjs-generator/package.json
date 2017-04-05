@@ -1,6 +1,6 @@
 {
   "name": "generator-esta-webjs",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "description": "ESTA WebJS yeoman generator package",
   "homepage": "https://github.com/SchweizerischeBundesbahnen/esta-webjs",
   "files": [

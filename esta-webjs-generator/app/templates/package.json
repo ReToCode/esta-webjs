@@ -1,6 +1,6 @@
 {
   "name": "esta-webjs-starterkit",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "ESTA WebJS Starterkit",
   "homepage": "https://github.com/SchweizerischeBundesbahnen/esta-webjs",
   "dependencies": {
@@ -18,7 +18,7 @@
     "angular-mocks": "^1.5.2",
     "babel-core": "^6.13.2",
     "babel-loader": "^6.2.4",
-    "babel-plugin-istanbul": "^2.0.0",
+    "babel-plugin-istanbul": "^2.0.3",
     "babel-preset-es2015": "^6.13.2",
     "browser-sync": "^2.10.0",
     "browser-sync-webpack-plugin": "^1.0.0",
@@ -36,6 +36,7 @@
     "karma-jasmine": "~1.0.2",
     "karma-junit-reporter": "^1.1.0",
     "karma-phantomjs-launcher": "^1.0.1",
+    "karma-remap-istanbul": "^0.6.0",
     "karma-sourcemap-loader": "^0.3.4",
     "karma-sourcemap-writer": "^0.1.2",
     "karma-webdriver-launcher": "^1.0.4",
@@ -46,7 +47,6 @@
     "phantomjs": "^2.1.7",
     "phantomjs-polyfill": "0.0.2",
     "raw-loader": "^0.5.1",
-    "remap-istanbul": "^0.6.4",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.6",
     "webpack": "^1.9.5",

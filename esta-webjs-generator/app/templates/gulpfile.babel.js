@@ -14,7 +14,6 @@ import WebpackDevServer from 'webpack-dev-server';
 import karma    from 'karma';
 import esdoc    from 'gulp-esdoc';
 import ip from 'ip';
-import remapIstanbul from 'remap-istanbul/lib/gulpRemapIstanbul';
 
 let webpackConfig = require('./webpack.config');
 let root = 'src';
@@ -73,34 +72,27 @@ gulp.task('serve', () => {
  * Gulp-Task: Fuehrt die Karma-Tests auf dem Selenium Webgrid aus
  */
 gulp.task('test-selenium-webgrid', (done) => {
-
     let hostname = process.env.host || ip.address();
     let externalport = process.env.externalport || 7777;
+
+    process.env.NODE_ENV = 'test';
 
     return new karma.Server({
         configFile: __dirname + '/karma.conf.js',
         hostname: hostname,
         port: externalport,
         browsers: ['SeleniumFF', 'SeleniumCH'] // IE ausgeschaltet aufgrund Bug im Selenium-Grid: 'SeleniumIE'
-    }, function () {
-        // If tests are done, remap coverage file
-        gulp.src('target/coverage/coverage.json')
-            .pipe(remapIstanbul({
-                reports: {
-                    'lcovonly': 'target/surefire/lcov.info'
-                }
-            }));
-        done();
-    }).start();
+    }, done).start();
 });
 
 /**
  * Gulp-Task: Fuehrt die Karma-Tests auf dem PhantomJS Browser aus
  */
 gulp.task('test-phantomjs', (done) => {
-
     let hostname = process.env.host || ip.address();
     let externalport = process.env.externalport || 7777;
+
+    process.env.NODE_ENV = 'test';
 
     return new karma.Server({
         configFile: __dirname + '/karma.conf.js',
@@ -129,6 +121,8 @@ gulp.task('doc', () => {
  * - Kopiert index.html nach /target/build
  */
 gulp.task('build', ['test-selenium-webgrid', 'doc'], (done) => {
+    process.env.NODE_ENV = 'prod';
+
     return webpack(webpackConfig.production, done);
 });
 

@@ -42,7 +42,7 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'spec.bundle.js': ['webpack', 'sourcemap', 'sourcemap-writer', 'coverage']
+            'spec.bundle.js': ['webpack', 'sourcemap', 'sourcemap-writer']
         },
 
         webpack: {
@@ -105,16 +105,23 @@ module.exports = function (config) {
             'karma-webpack',
             'karma-sourcemap-loader',
             'karma-webdriver-launcher',
-            'karma-sourcemap-writer'
+            'karma-sourcemap-writer',
+            'karma-remap-istanbul'
         ],
 
         // Coverage & JUnit Report fuer SonarQube
         junitReporter: {
             outputDir: 'target/surefire', suite: 'unit'
-        }, coverageReporter: {
+        },
+
+        coverageReporter: {
             reporters: [
                 {
                     type: 'json', dir: 'target', subdir: 'coverage', file: 'coverage.json'
+                }
+                ,
+                {
+                    type: 'lcovonly', dir: 'target', subdir: 'coverage', file: 'lcov.info'
                 }
             ]
         }
