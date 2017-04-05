@@ -121,7 +121,7 @@ module.exports = function (config) {
                 }
                 ,
                 {
-                    type: 'lcovonly', dir: 'target', subdir: 'coverage', file: 'lcov.info'
+                    type: 'lcovonly', dir: 'target', subdir: 'surefire', file: 'lcov.info'
                 }
             ]
         }
