@@ -194,6 +194,7 @@ module.exports = generators.Base.extend({
 
         // *.iml File loeschen
         yo.fs.delete(yo.destinationPath('ch.sbb.esta.iml'));
+        yo.fs.delete(yo.destinationPath('esta-webjs-starterkit.iml'));
 
         done();
     },
@@ -280,6 +281,8 @@ module.exports = generators.Base.extend({
 
         yo.spawnCommand('npm', ['uninstall', 'angular-bootstrap-npm', '--save']);
         yo.spawnCommand('npm', ['uninstall', 'angular-cookies', '--save']);
+        yo.spawnCommand('npm', ['uninstall', 'isparta-loader', '--save']);
+        yo.spawnCommand('npm', ['uninstall', 'phantomjs', '--save']);
     },
 
     /**
@@ -316,6 +319,31 @@ module.exports = generators.Base.extend({
 
         yo.fs.commit(function() {
             yo.fs.copy(yo.templatePath('.jshintrc'), yo.destinationPath('.jshintrc'));
+        });
+
+        // Version 1.2.0
+        yo.fs.delete(yo.destinationPath('.babelrc'));
+
+        yo.fs.commit(function() {
+            yo.fs.copy(yo.templatePath('.babelrc'), yo.destinationPath('.babelrc'));
+        });
+
+        yo.fs.delete(yo.destinationPath('gulpfile.babel.js'));
+
+        yo.fs.commit(function() {
+            yo.fs.copy(yo.templatePath('gulpfile.babel.js'), yo.destinationPath('gulpfile.babel.js'));
+        });
+
+        yo.fs.delete(yo.destinationPath('karma.conf.js'));
+
+        yo.fs.commit(function() {
+            yo.fs.copy(yo.templatePath('karma.conf.js'), yo.destinationPath('karma.conf.js'));
+        });
+
+        yo.fs.delete(yo.destinationPath('spec.bundle.js'));
+
+        yo.fs.commit(function() {
+            yo.fs.copy(yo.templatePath('spec.bundle.js'), yo.destinationPath('spec.bundle.js'));
         });
     },
 
