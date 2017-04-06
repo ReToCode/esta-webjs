@@ -14,6 +14,15 @@ var generators = require('yeoman-generator');
 var pkg = require('../package.json');
 var yosay = require('yosay');
 
+var getDevDependencyVersionsFromPackageJson = function(yo) {
+    var packageJsonPath = yo.templatePath('package.json');
+    var packageJson = yo.fs.readJSON(packageJsonPath);
+    var result = [];
+    Object.getOwnPropertyNames(packageJson.devDependencies).forEach(function(key) {
+        result.push(key + '@' + packageJson.devDependencies[key]);
+    });
+    return result;
+};
 var getDependencyVersionsFromPackageJson = function(yo) {
     var packageJsonPath = yo.templatePath('package.json');
     var packageJson = yo.fs.readJSON(packageJsonPath);
@@ -236,6 +245,7 @@ module.exports = generators.Base.extend({
 
         yo.log('The following npm packages will be updated:');
         yo.log(getDependencyVersionsFromPackageJson(yo));
+        yo.log(getDevDependencyVersionsFromPackageJson(yo));
 
         var done = yo.async();
         yo.prompt({
@@ -263,9 +273,10 @@ module.exports = generators.Base.extend({
         if (!yo.options.update || !yo.continueUpdate) {
             return;
         }
-
-        yo.npmInstall(getDependencyVersionsFromPackageJson(yo), {'save': true}, function () {
-            yo.log(yosay('Everything is ready - open your console and type \"gulp\"!'));
+        yo.npmInstall(getDevDependencyVersionsFromPackageJson(yo), {'save-dev': true}, function() {
+            yo.npmInstall(getDependencyVersionsFromPackageJson(yo), {'save': true}, function () {
+                yo.log(yosay('Everything is ready - open your console and type \"gulp\"!'));
+            });
         });
     },
 
@@ -281,8 +292,9 @@ module.exports = generators.Base.extend({
 
         yo.spawnCommand('npm', ['uninstall', 'angular-bootstrap-npm', '--save']);
         yo.spawnCommand('npm', ['uninstall', 'angular-cookies', '--save']);
-        yo.spawnCommand('npm', ['uninstall', 'isparta-loader', '--save']);
-        yo.spawnCommand('npm', ['uninstall', 'phantomjs', '--save']);
+        yo.spawnCommand('npm', ['uninstall', 'isparta-loader', '--save-dev']);
+        yo.spawnCommand('npm', ['uninstall', 'phantomjs', '--save-dev']);
+        yo.spawnCommand('npm', ['uninstall', 'remap-istanbul', '--save-dev']);
     },
 
     /**
