@@ -3,7 +3,7 @@ FROM set_from_openshift # Wird von Openshift gesetzt
 MAINTAINER Reto Lehmann <reto.lehmann@sbb.ch>
 
 # Download sources from Repository
-RUN wget "http://repo.sbb.ch/service/local/artifact/maven/redirect?r=mirror&g=ch.sbb.esta.webjs&a=esta-webjs-starterkit&v=$VERSION&p=tar.gz" -O esta-webjs-starterkit.tar.gz
+ADD "http://repo.sbb.ch/service/local/artifact/maven/redirect?r=mirror&g=ch.sbb.esta.webjs&a=esta-webjs-starterkit&v=$VERSION&p=tar.gz" esta-webjs-starterkit.tar.gz
 
 # Extract and move to nginx html folder
 RUN tar -xzf esta-webjs-starterkit.tar.gz
