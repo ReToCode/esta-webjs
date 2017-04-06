@@ -31,9 +31,7 @@ angular.module('app', [
     uiRouter, ngTranslate, ngTranslateStaticFilesLoader, ngResource,
     uiBootstrap, Components.name
 ])
-    .config(/*@ngInject*/($translateProvider, $httpProvider, $qProvider) => {
-        // Bug in Angular 1.5.9: https://github.com/angular-ui/ui-router/issues/2889
-        $qProvider.errorOnUnhandledRejections(false);
+    .config(/*@ngInject*/($translateProvider, $httpProvider) => {
 
         // Translation settings
         $translateProvider.translations('de', langDe);
