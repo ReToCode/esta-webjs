@@ -14,6 +14,15 @@ var generators = require('yeoman-generator');
 var pkg = require('../package.json');
 var yosay = require('yosay');
 
+var getDevDependencyVersionsFromPackageJson = function(yo) {
+    var packageJsonPath = yo.templatePath('package.json');
+    var packageJson = yo.fs.readJSON(packageJsonPath);
+    var result = [];
+    Object.getOwnPropertyNames(packageJson.devDependencies).forEach(function(key) {
+        result.push(key + '@' + packageJson.devDependencies[key]);
+    });
+    return result;
+};
 var getDependencyVersionsFromPackageJson = function(yo) {
     var packageJsonPath = yo.templatePath('package.json');
     var packageJson = yo.fs.readJSON(packageJsonPath);
@@ -194,6 +203,7 @@ module.exports = generators.Base.extend({
 
         // *.iml File loeschen
         yo.fs.delete(yo.destinationPath('ch.sbb.esta.iml'));
+        yo.fs.delete(yo.destinationPath('esta-webjs-starterkit.iml'));
 
         done();
     },
@@ -235,6 +245,7 @@ module.exports = generators.Base.extend({
 
         yo.log('The following npm packages will be updated:');
         yo.log(getDependencyVersionsFromPackageJson(yo));
+        yo.log(getDevDependencyVersionsFromPackageJson(yo));
 
         var done = yo.async();
         yo.prompt({
@@ -262,9 +273,10 @@ module.exports = generators.Base.extend({
         if (!yo.options.update || !yo.continueUpdate) {
             return;
         }
-
-        yo.npmInstall(getDependencyVersionsFromPackageJson(yo), {'save': true}, function () {
-            yo.log(yosay('Everything is ready - open your console and type \"gulp\"!'));
+        yo.npmInstall(getDevDependencyVersionsFromPackageJson(yo), {'save-dev': true}, function() {
+            yo.npmInstall(getDependencyVersionsFromPackageJson(yo), {'save': true}, function () {
+                yo.log(yosay('Everything is ready - open your console and type \"gulp\"!'));
+            });
         });
     },
 
@@ -280,6 +292,9 @@ module.exports = generators.Base.extend({
 
         yo.spawnCommand('npm', ['uninstall', 'angular-bootstrap-npm', '--save']);
         yo.spawnCommand('npm', ['uninstall', 'angular-cookies', '--save']);
+        yo.spawnCommand('npm', ['uninstall', 'isparta-loader', '--save-dev']);
+        yo.spawnCommand('npm', ['uninstall', 'phantomjs', '--save-dev']);
+        yo.spawnCommand('npm', ['uninstall', 'remap-istanbul', '--save-dev']);
     },
 
     /**
@@ -316,6 +331,31 @@ module.exports = generators.Base.extend({
 
         yo.fs.commit(function() {
             yo.fs.copy(yo.templatePath('.jshintrc'), yo.destinationPath('.jshintrc'));
+        });
+
+        // Version 1.2.0
+        yo.fs.delete(yo.destinationPath('.babelrc'));
+
+        yo.fs.commit(function() {
+            yo.fs.copy(yo.templatePath('.babelrc'), yo.destinationPath('.babelrc'));
+        });
+
+        yo.fs.delete(yo.destinationPath('gulpfile.babel.js'));
+
+        yo.fs.commit(function() {
+            yo.fs.copy(yo.templatePath('gulpfile.babel.js'), yo.destinationPath('gulpfile.babel.js'));
+        });
+
+        yo.fs.delete(yo.destinationPath('karma.conf.js'));
+
+        yo.fs.commit(function() {
+            yo.fs.copy(yo.templatePath('karma.conf.js'), yo.destinationPath('karma.conf.js'));
+        });
+
+        yo.fs.delete(yo.destinationPath('spec.bundle.js'));
+
+        yo.fs.commit(function() {
+            yo.fs.copy(yo.templatePath('spec.bundle.js'), yo.destinationPath('spec.bundle.js'));
         });
     },
 

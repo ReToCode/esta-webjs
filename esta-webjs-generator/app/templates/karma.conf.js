@@ -42,7 +42,7 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'spec.bundle.js': ['webpack', 'sourcemap', 'coverage']
+            'spec.bundle.js': ['webpack', 'sourcemap', 'sourcemap-writer']
         },
 
         webpack: {
@@ -85,39 +85,42 @@ module.exports = function (config) {
                 base: 'WebDriver',
                 config: seleniumWebgrid,
                 browserName: 'internet explorer',
-                version: 11,
-                'x-ua-compatible': 'IE=EmulateIE11',
-                platform: 'WINDOWS',
-                pseudoActivityInterval: 30000
-
+                'x-ua-compatible': 'IE=edge'
             }
         },
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: ['PhantomJS'], // Test auf dem PhantomJS
-        //browsers: ['SeleniumFF', 'SeleniumIE', 'SeleniumCH'], // Test auf dem Selenium-Webgrid
+        // browsers: ['SeleniumFF', 'SeleniumCH', 'SeleniumIE'], // Test auf dem Selenium-Webgrid
 
         // if true, Karma runs tests once and exits
         singleRun: true,
 
         plugins: [
-            'karma-junit-reporter',
             'karma-jasmine',
-            'karma-coverage',
             'karma-phantomjs-launcher',
+            'karma-junit-reporter',
+            'karma-coverage',
             'karma-webpack',
             'karma-sourcemap-loader',
-            'karma-webdriver-launcher'
+            'karma-webdriver-launcher',
+            'karma-sourcemap-writer'
         ],
 
         // Coverage & JUnit Report fuer SonarQube
         junitReporter: {
             outputDir: 'target/surefire', suite: 'unit'
-        }, coverageReporter: {
+        },
+
+        coverageReporter: {
             reporters: [
                 {
-                    type: 'lcov', dir: 'target/surefire', subdir: '.'
+                    type: 'json', dir: 'target', subdir: 'coverage', file: 'coverage.json'
+                }
+                ,
+                {
+                    type: 'lcovonly', dir: 'target', subdir: 'surefire', file: 'lcov.info'
                 }
             ]
         }

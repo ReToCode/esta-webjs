@@ -52,13 +52,6 @@ let paths = {
 };
 
 /**
- * Gulp-Task: Kopiert alle statischen Dateien nach /dist
- */
-gulp.task('copyHtml', () => {
-    return gulp.src(path.join(root, 'index.html')).pipe(gulp.dest(paths.output));
-});
-
-/**
  * Gulp-Task: Fuehrt webpack aus und startet den Development-Server
  */
 gulp.task('serve', () => {
@@ -69,25 +62,26 @@ gulp.task('serve', () => {
             colors: true
         }
     }).listen(3000, 'localhost', function (err) {
-            if (err) {
-                console.error(err);
-            }
-        });
+        if (err) {
+            console.error(err);
+        }
+    });
 });
 
 /**
  * Gulp-Task: Fuehrt die Karma-Tests auf dem Selenium Webgrid aus
  */
 gulp.task('test-selenium-webgrid', (done) => {
-
     let hostname = process.env.host || ip.address();
     let externalport = process.env.externalport || 7777;
+
+    process.env.NODE_ENV = 'test';
 
     return new karma.Server({
         configFile: __dirname + '/karma.conf.js',
         hostname: hostname,
         port: externalport,
-        browsers: ['SeleniumFF', 'SeleniumCH'] // 'SeleniumIE' Selenium-Grid IE funktioniert zurzeit nicht
+        browsers: ['SeleniumFF', 'SeleniumCH'] // IE ausgeschaltet aufgrund Bug im Selenium-Grid: 'SeleniumIE'
     }, done).start();
 });
 
@@ -95,9 +89,10 @@ gulp.task('test-selenium-webgrid', (done) => {
  * Gulp-Task: Fuehrt die Karma-Tests auf dem PhantomJS Browser aus
  */
 gulp.task('test-phantomjs', (done) => {
-
     let hostname = process.env.host || ip.address();
     let externalport = process.env.externalport || 7777;
+
+    process.env.NODE_ENV = 'test';
 
     return new karma.Server({
         configFile: __dirname + '/karma.conf.js',
@@ -107,11 +102,15 @@ gulp.task('test-phantomjs', (done) => {
     }, done).start();
 });
 
+
 /**
  * Gulp-Task: Fuehrt ESDoc aus um die Code-Dokumentation zu erstellen
  */
 gulp.task('doc', () => {
-    return gulp.src(root).pipe(esdoc({destination: paths.documentation, index: path.join(root, 'README.md')}));
+    return gulp.src(root).pipe(esdoc({
+        destination: paths.documentation,
+        index: path.join(root, 'README.md')
+    }));
 });
 
 /**
@@ -122,7 +121,7 @@ gulp.task('doc', () => {
  * - Kopiert index.html nach /target/build
  */
 gulp.task('build', ['test-selenium-webgrid', 'doc'], (done) => {
-    gulp.src(path.join(root, 'index.html')).pipe(gulp.dest(paths.build));
+    process.env.NODE_ENV = 'prod';
 
     return webpack(webpackConfig.production, done);
 });
@@ -130,4 +129,4 @@ gulp.task('build', ['test-selenium-webgrid', 'doc'], (done) => {
 /**
  * Gulp-Task: Standardfall mit 'gulp' kopiert das HTML nach /dist und startet Webserver
  */
-gulp.task('default', ['copyHtml', 'serve']);
+gulp.task('default', ['serve']);
