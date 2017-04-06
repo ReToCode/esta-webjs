@@ -105,8 +105,7 @@ module.exports = function (config) {
             'karma-webpack',
             'karma-sourcemap-loader',
             'karma-webdriver-launcher',
-            'karma-sourcemap-writer',
-            'karma-remap-istanbul'
+            'karma-sourcemap-writer'
         ],
 
         // Coverage & JUnit Report fuer SonarQube
