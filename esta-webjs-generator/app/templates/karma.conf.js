@@ -91,12 +91,13 @@ module.exports = function (config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['PhantomJS'], // Test auf dem PhantomJS
+        browsers: ['SeleniumCH'], // Test auf dem PhantomJS
         // browsers: ['SeleniumFF', 'SeleniumCH', 'SeleniumIE'], // Test auf dem Selenium-Webgrid
 
         // if true, Karma runs tests once and exits
         singleRun: true,
 
+        /*
         plugins: [
             'karma-jasmine',
             'karma-phantomjs-launcher',
@@ -107,6 +108,7 @@ module.exports = function (config) {
             'karma-webdriver-launcher',
             'karma-sourcemap-writer'
         ],
+        */
 
         // Coverage & JUnit Report fuer SonarQube
         junitReporter: {
