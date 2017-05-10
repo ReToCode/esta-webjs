@@ -102,6 +102,66 @@ gulp.task('test-phantomjs', (done) => {
     }, done).start();
 });
 
+/**
+ * Gulp-Task: Stellt sicher das alle Browsertreiber vorhanden sind
+ */
+let webdriver_update = require('gulp-protractor').webdriver_update;
+gulp.task('webdriver_update', webdriver_update);
+
+/**
+ * Gulp-Task: Fuehrt Protractor Tests lokal aus
+ */
+gulp.task('e2e-test-local', ['webdriver_update'], () => {
+    let protractor = require('gulp-protractor').protractor;
+
+    return gulp.src(['e2e/**/*.spec.js'])
+        .pipe(protractor({
+            configFile: './protractor.config.js',
+            args: ['--baseUrl', 'http://localhost:3000',
+                '--directConnect', 'true']
+        }))
+        .on('error', function (e) {
+            throw e;
+        });
+});
+
+/**
+ * Gulp-Task: Fuehrt Protractor Tests auf dem SBB Selenium-Grid aus
+ */
+gulp.task('e2e-test-selenium-webgrid', (done) => {
+    let hostname = process.env.host || ip.address();
+    let externalport = process.env.externalport || 3000;
+
+    console.log('Protractor-Tests running on: ', hostname, externalport);
+
+    // Start WebpackDev-Server
+    let devServer = new WebpackDevServer(webpack(webpackConfig.protractor), {
+        contentBase: './dist/',
+        disableHostCheck: true,
+        public: hostname + ':' + externalport,
+        historyApiFallback: true
+    });
+
+    devServer.listen(externalport, '0.0.0.0', () => {
+        // Start protractor tests
+        let protractor = require('gulp-protractor').protractor;
+
+        gulp.src(['e2e/**/*.spec.js'])
+            .pipe(protractor({
+                configFile: './protractor.config.js',
+                args: ['--baseUrl', 'http://' + hostname + ':' + externalport,
+                    '--seleniumAddress', 'http://webtestgrid.sbb.ch:4444/wd/hub']
+            })
+                .on('error', function (e) {
+                    throw e;
+                })
+                .on('end', function () {
+                    console.log('e2e-tests are done now closing webserver');
+                    devServer.close();
+                    done();
+                }));
+    });
+});
 
 /**
  * Gulp-Task: Fuehrt ESDoc aus um die Code-Dokumentation zu erstellen

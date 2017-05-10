@@ -9,11 +9,10 @@
             </div>
             <div class="container">
                 <section>
-                    <h2>{{ 'ABOUT_SUBTITLE' | translate }}</h2>
-
-                    <p>{{ 'ABOUT_TEXT' | translate }}</p>
-                    <button class="btn btn-primary" ng-click="$ctrl.changeLanguage('de')">Deutsch</button>
-                    <button class="btn btn-default" ng-click="$ctrl.changeLanguage('en')">English</button>
+                <h2 id="about-subtitle">{{ 'ABOUT_SUBTITLE' | translate }}</h2>
+                    <p id="about-text">{{ 'ABOUT_TEXT' | translate }}</p>
+                    <button id="change-to-german-button" class="btn btn-primary" ng-click="$ctrl.changeLanguage('de')">Deutsch</button>
+                    <button id="change-to-english-button" class="btn btn-default" ng-click="$ctrl.changeLanguage('en')">English</button>
                 </section>
             </div>
             <div class="spacer"></div>
