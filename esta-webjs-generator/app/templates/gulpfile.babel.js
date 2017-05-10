@@ -14,6 +14,7 @@ import WebpackDevServer from 'webpack-dev-server';
 import karma    from 'karma';
 import esdoc    from 'gulp-esdoc';
 import ip from 'ip';
+import runSequence from 'run-sequence';
 
 let webpackConfig = require('./webpack.config');
 let root = 'src';
