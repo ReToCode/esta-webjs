@@ -1,5 +1,11 @@
-/*
- * Copyright (C) Schweizerische Bundesbahnen SBB, 2016.
+/**
+ * Copyright (C) Schweizerische Bundesbahnen SBB, 2015.
+ *
+ * ESTA WebJS: e2e Test für die About Seite.
+ *
+ * @author u218609 (Kevin Kreuzer)
+ * @version: 0.0.11
+ * @since 16.05.2017, 2017.
  */
 import aboutPage from './about.page';
 
