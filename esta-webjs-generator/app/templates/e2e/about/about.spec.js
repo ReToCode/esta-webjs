@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Schweizerische Bundesbahnen SBB, 2015.
+ * Copyright (C) Schweizerische Bundesbahnen SBB, 2017.
  *
  * ESTA WebJS: e2e Test für die About Seite.
  *
@@ -29,5 +29,4 @@ describe('About', () => {
         expect(about.subtitle.getText()).toBe('Dieser Text wird von ngTranslate übersetzt');
         expect(about.text.getText()).toBe('Hier werden Informationen über ESTA WebJS gezeigt.');
     })
-
 })

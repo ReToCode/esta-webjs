@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Schweizerische Bundesbahnen SBB, 2015.
+ * Copyright (C) Schweizerische Bundesbahnen SBB, 2017.
  *
  * ESTA WebJS: Page Object für die About-Seite.
  *
