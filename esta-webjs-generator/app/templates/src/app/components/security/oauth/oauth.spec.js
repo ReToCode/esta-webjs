@@ -245,7 +245,7 @@ describe('OAuthService', () => {
             expect(result).toBe('');
         });
 
-        fit('should return the authHeader', () => {
+        it('should return the authHeader', () => {
             //given
             let service = makeService();
             const authDataMock = {
@@ -254,7 +254,7 @@ describe('OAuthService', () => {
                 }
             };
             const expectedAuthHeader = {Authorization: 'Bearer Awesome Token'};
-            spyOn(service, '_getAuthData').and.returnValue(authDataMock);
+            spyOn(OAuthService, '_getAuthData').and.returnValue(authDataMock);
             //when
             let authHeader = service.getAuthHeader();
             //then
