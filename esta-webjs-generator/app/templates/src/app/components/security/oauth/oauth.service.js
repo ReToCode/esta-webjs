@@ -185,6 +185,16 @@ class OAuthService {
     }
 
     /**
+     * Gibt die Authorization-Header fuer Backend Requests zurueck.
+     * @returns {{Authorization: string}}
+     */
+    getAuthHeader() {
+        return {
+            'Authorization': 'Bearer ' + OAuthService._getAuthData(this.$window).details.tokenValue
+        };
+    }
+
+    /**
      * Gibt die notwendigen Header fuer Auth-Server-Aufrufe zurueck.
      * @returns {Authorization: string, Content-Type: String("application/x-www-form-urlencoded")}
      * @private

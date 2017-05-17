@@ -16,7 +16,8 @@ describe('OAuthService', () => {
         $location, $windowMock;
 
     messagesServiceMock = {
-        errorMessage: function () {}
+        errorMessage: function () {
+        }
     };
 
     configMock = {
@@ -33,7 +34,8 @@ describe('OAuthService', () => {
 
     $windowMock = {
         location: {
-            replace: function() {}
+            replace: function () {
+            }
         }
     };
 
@@ -241,6 +243,22 @@ describe('OAuthService', () => {
             let result = service.getUsername();
 
             expect(result).toBe('');
+        });
+
+        fit('should return the authHeader', () => {
+            //given
+            let service = makeService();
+            const authDataMock = {
+                details: {
+                    tokenValue: 'Awesome Token'
+                }
+            };
+            const expectedAuthHeader = {Authorization: 'Bearer Awesome Token'};
+            spyOn(service, '_getAuthData').and.returnValue(authDataMock);
+            //when
+            let authHeader = service.getAuthHeader();
+            //then
+            expect(authHeader).toEqual(expectedAuthHeader);
         });
     });
 });
