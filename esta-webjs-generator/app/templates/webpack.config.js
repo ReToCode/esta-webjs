@@ -85,3 +85,18 @@ exports.development = extend({}, commonConfig, {
         })
     ], watch: true, devtool: 'source-map'
 });
+
+/**
+ * Protractor Konfigurationsdatei fuer Webpack (der Teil, der nur fuer die Protractor-Tests da sind)
+ * @type {} Webpack Konfiguration
+ */
+exports.protractor = extend({}, commonConfig, {
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: '[name].[chunkhash].js'
+    }, plugins: [
+        new HtmlWebpackPlugin({
+            template: '../index.html'
+        })
+    ]
+});
