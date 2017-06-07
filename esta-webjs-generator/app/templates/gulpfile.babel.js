@@ -182,6 +182,7 @@ gulp.task('doc', () => {
  * - Kopiert index.html nach /target/build
  */
 gulp.task('build', (done) => {
+    process.env.NODE_ENV = 'prod';
     runSequence('doc',
         'test-selenium-webgrid', 'e2e-test-selenium-webgrid', () => {
             gulp.src(path.join(root, 'index.html')).pipe(gulp.dest(paths.build));
