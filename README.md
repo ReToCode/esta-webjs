@@ -18,10 +18,10 @@ ESTA WebJS is a development stack for web applications with AngularJS, written i
 
 * First you'll need node & npm installed
 * Install the tools: npm install -g yo webpack webpack-dev-server gulp-cli
-* Checkout this repository
+* Checkout this repository: `git clone https://github.com/SchweizerischeBundesbahnen/esta-webjs.git`
 * Remove `esta-webjs-style` from `/app/templates/package.json`
-* Remove the `import 'esta-webjs-style/build/css/style.css';` from `/app/templates/app/app.js`
-* Navigate to / and run `npm link`
+* Remove the `import 'esta-webjs-style/build/css/style.css';` from `/app/templates/app/src/app.js`
+* Navigate to `<checkout-root>/esta-webjs-generator` and run `npm link`
 * Navigate to where you want your app and run `yo esta-webjs`
 
 ## Tasks
